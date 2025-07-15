@@ -1,0 +1,315 @@
+name: drv8311
+datasheet_link: https://www.ti.com/lit/ds/symlink/drv8311.pdf
+register_size: 16 # bits
+registers:
+  dev_sts1:
+    address: 0x00
+    fields:
+      otp_flt:
+        pos: 8
+        mask: 0x1
+      reset:
+        pos: 7
+        mask: 0x1
+      spi_flt:
+        pos: 6
+        mask: 0x1
+      ocp:
+        pos: 5
+        mask: 0x1
+      uvp:
+        pos: 2
+        mask: 0x1
+      ot:
+        pos: 1
+        mask: 0x1
+      fault:
+        pos: 0
+        mask: 0x1
+  ot_sts:
+    address: 0x4
+    fields:
+      ots_avdd:
+        pos: 2
+        mask: 0x1
+      otw:
+        pos: 1
+        mask: 0x1
+      otsd:
+        pos: 0
+        mask: 0x1
+  sup_sts:
+    address: 0x5
+    fields:
+      csaref_uv:
+        pos: 5
+        mask: 0x1
+      cp_uv:
+        pos: 6
+        mask: 0x1
+      avdd_uv:
+        pos: 2
+        mask: 0x1
+      vinavdd_uv:
+        pos: 0
+        mask: 0x1
+  drv_sts:
+    address: 0x6
+    fields:
+      ocpc_hs:
+        pos: 6
+        mask: 0x1
+      ocpb_hs:
+        pos: 5
+        mask: 0x1
+      ocpa_hs:
+        pos: 4
+        mask: 0x1
+      ocpc_ls:
+        pos: 2
+        mask: 0x1
+      ocpb_ls:
+        pos: 1
+        mask: 0x1
+      ocpa_ls:
+        pos: 0
+        mask: 0x1
+  sys_sts:
+    address: 0x7
+    fields:
+      otpld_err:
+        pos: 4
+        mask: 0x1
+      spi_parity:
+        pos: 2
+        mask: 0x1
+      bus_cnt:
+        pos: 1
+        mask: 0x1
+      frm_err:
+        pos: 0
+        mask: 0x1
+  pwm_sync_prd:
+    address: 0xC
+    fields:
+      pwm_sync_prd:
+        pos: 0
+        mask: 0xFFF
+  flt_mode:
+    address: 0x10
+    fields:
+      otpflt_mode:
+        pos: 8
+        mask: 0x1
+      spflt_mode:
+        pos: 7
+        mask: 0x1
+      ocp_mode:
+        pos: 4
+        mask: 0x7
+      uvp_mode:
+        pos: 2
+        mask: 0x3
+      otsd_mode:
+        pos: 0
+        mask: 0x3
+  sysf_ctrl:
+    address: 0x12
+    fields:
+      otavdd_en:
+        pos: 10
+        mask: 0x1
+      otw_en:
+        pos: 9
+        mask: 0x1
+      csarefuv_en:
+        pos: 5
+        mask: 0x1
+  drvf_ctrl:
+    address: 0x13
+    fields:
+      ocp_deg:
+        pos: 4
+        mask: 0x3
+      ocp_tblank:
+        pos: 2
+        mask: 0x3
+      ocp_lvl:
+        pos: 0
+        mask: 0x1
+  flt_tctrl:
+    address: 0x16
+    fields:
+      slow_tretry:
+        pos: 2
+        mask: 0x3
+      fast_tretry:
+        pos: 0
+        mask: 0x3
+  flt_clr:
+    address: 0x17
+    fields:
+      flt_clr:
+        pos: 0
+        mask: 0x1
+  pwmg_period:
+    address: 0x18
+    fields:
+      pwm_prd_out:
+        pos: 0
+        mask: 0xFFF
+  pwmg_a_duty:
+    address: 0x19
+    fields:
+      pwm_duty_outa:
+        pos: 0
+        mask: 0xFFF
+  pwmg_b_duty:
+    address: 0x1a
+    fields:
+      pwm_duty_outb:
+        pos: 0
+        mask: 0xFFF
+  pwmg_c_duty:
+    address: 0x1b
+    fields:
+      pwm_duty_outc:
+        pos: 0
+        mask: 0xFFF
+  pwm_state:
+    address: 0x1C
+    fields:
+      pwmc_state:
+        pos: 8
+        mask: 0x7
+        options:
+          HIGH_OFF_LOW_OFF: 0x0
+          HIGH_OFF_LOW_ON: 0x1
+          HIGH_ON_LOW_OFF: 0x2
+          HIGH_OFF_LOW_PWM: 0x5
+          HIGH_PWM_LOW_OFF: 0x6
+          HIGH_PWM_LOW_INVERSE_PWM: 0x7
+      pwmb_state:
+        pos: 4
+        mask: 0x7
+        options:
+          HIGH_OFF_LOW_OFF: 0x0
+          HIGH_OFF_LOW_ON: 0x1
+          HIGH_ON_LOW_OFF: 0x2
+          HIGH_OFF_LOW_PWM: 0x5
+          HIGH_PWM_LOW_OFF: 0x6
+          HIGH_PWM_LOW_INVERSE_PWM: 0x7
+      pwma_state:
+        pos: 0
+        mask: 0x7
+        options:
+          HIGH_OFF_LOW_OFF: 0x0
+          HIGH_OFF_LOW_ON: 0x1
+          HIGH_ON_LOW_OFF: 0x2
+          HIGH_OFF_LOW_PWM: 0x5
+          HIGH_PWM_LOW_OFF: 0x6
+          HIGH_PWM_LOW_INVERSE_PWM: 0x7
+  pwmg_ctrl:
+    address: 0x1d
+    fields:
+      pwm_en:
+        pos: 10
+        mask: 0x1
+      pwmcntr_mode:
+        pos: 8
+        mask: 0x3
+        options:
+          UP_AND_DOWN: 0x0
+          UP: 0x1
+          DOWN: 0x2
+          NO_ACTION: 0x3
+      pwm_osc_sync:
+        pos: 5
+        mask: 0x7
+        comment: "see options in datasheet"
+      spiclk_freq_sync:
+        pos: 2
+        mask: 0x7
+        options:
+          _1MHz: 0x0
+          _1_25MHz: 0x1
+          _2MHz: 0x2
+          _2_5MHz: 0x3
+          _4MHz: 0x4
+          _5MHz: 0x5
+          _8MHz: 0x6
+          _10MHz: 0x7
+      spisync_acrcy:
+        pos: 0
+        mask: 0x3
+        options:
+          _512_CLOCK_CYCLES: 0x0
+          _256_CLOCK_CYCLES: 0x1
+          _128_CLOCK_CYCLES: 0x2
+          _64_CLOCK_CYCLES: 0x3
+  pwm_ctrl1:
+    address: 0x20
+    fields:
+      ssc_dis:
+        pos: 2
+        mask: 0x1
+      pwm_mode:
+        pos: 0
+        mask: 0x3
+        options:
+          _6X_MODE: 0x0
+          _6X_MODE_DUPLICATE: 0x1
+          _3X_MODE: 0x2
+          _PWM_GENERATION_MODE: 0x3
+  drv_ctrl:
+    address: 0x22
+    fields:
+      dlycmp_en:
+        pos: 7
+        mask: 0x1
+      tdead_ctrl:
+        pos: 4
+        mask: 0x7
+        options:
+          NO_DEADTIME: 0x0
+          _200NS: 0x1
+          _400NS: 0x2
+          _600NS: 0x3
+          _800NS: 0x4
+          _1US: 0x5
+          _1_2US: 0x6
+          _1_4US: 0x7
+      slew_rate:
+        pos: 0
+        mask: 0x3
+        options:
+          _35_V_PER_US: 0x0
+          _75_V_PER_US: 0x1
+          _180_V_PER_US: 0x2
+          _230_V_PER_US: 0x3
+  csa_ctrl:
+    address: 0x23
+    fields:
+      csa_en:
+        pos: 3
+        mask: 0x1
+      csa_gain:
+        pos: 0
+        mask: 0x3
+        options:
+          _250_MV_PER_A: 0x0
+          _500_MV_PER_A: 0x1
+          _1_V_PER_A: 0x2
+          _2_V_PER_A: 0x3
+  sys_ctrl:
+    address: 0x3F
+    fields:
+      write_key:
+        pos: 12
+        mask: 0x7
+      reg_lock:
+        pos: 7
+        mask: 0x1
+      spi_pen:
+        pos: 6
+        mask: 0x1
