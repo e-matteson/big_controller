@@ -58,6 +58,28 @@ void assert(bool condition) {
     }
 }
 
+void scan_duties(int max_percent) {
+    int raw_max = 1000;
+    for (int percent = 0; percent <= max_percent; percent += 1) {
+        uint16_t duty = percent * raw_max / 100;
+        auto a_reg = pwmg_a_duty_register_t{duty};
+        // a_reg.print();
+        driver.write(a_reg);
+        driver.write(pwmg_b_duty_register_t{duty});
+        driver.write(pwmg_c_duty_register_t{duty});
+        delay(2);
+    }
+    for (int percent = max_percent; percent > 0; percent -= 1) {
+        uint16_t duty = percent * raw_max / 100;
+        auto a_reg = pwmg_a_duty_register_t{duty};
+        // a_reg.print();
+        driver.write(a_reg);
+        driver.write(pwmg_b_duty_register_t{duty});
+        driver.write(pwmg_c_duty_register_t{duty});
+        delay(2);
+    }
+}
+
 void setup() {
     Serial.begin(9600);
     spi.begin();
@@ -70,47 +92,31 @@ void setup() {
     pwmg_ctrl->pwm_en = 1;
     driver.write(pwmg_ctrl.value());
 
-    // auto drv_ctrl = driver.read<drv_ctrl_register_t>();
-    // assert(drv_ctrl.has_value());
-    // drv_ctrl->tdead_ctrl = tdead_ctrl_enum::_1US;
-    // driver.write(drv_ctrl.value());
+    auto drv_ctrl = driver.read<drv_ctrl_register_t>();
+    assert(drv_ctrl.has_value());
+    drv_ctrl->tdead_ctrl = tdead_ctrl_enum::_1US;
+    drv_ctrl->dlycmp_en = 1;
+    driver.write(drv_ctrl.value());
 }
 
+
 void loop() {
-    // for(uint32_t i = 0; i < UINT32_MAX; i++) {
-    //     uint32_t a_index = i % 360;
-    //     uint32_t b_index = (i + 120) % 360;
-    //     uint32_t c_index = (i + 240) % 360;
+    for(uint32_t i = 0; i < UINT32_MAX; i++) {
+        uint32_t a_index = i % 360;
+        uint32_t b_index = (i + 120) % 360;
+        uint32_t c_index = (i + 240) % 360;
 
-    //     pwmg_a_duty_register_t a_reg{sineLookupTable[a_index]};
-    //     pwmg_b_duty_register_t b_reg{sineLookupTable[b_index]};
-    //     pwmg_c_duty_register_t c_reg{sineLookupTable[c_index]};
+        pwmg_a_duty_register_t a_reg{sineLookupTable[a_index]};
+        pwmg_b_duty_register_t b_reg{sineLookupTable[b_index]};
+        pwmg_c_duty_register_t c_reg{sineLookupTable[c_index]};
 
-    //     driver.write(a_reg);
-    //     driver.write(b_reg);
-    //     driver.write(c_reg);
-    //     a_reg.print();
-    //     b_reg.print();
-    //     c_reg.print();
-    //     delay(3);
-    // }
-    for (int percent = 0; percent <= 50; percent += 1) {
-        uint16_t duty = percent * 1000 / 100;
-        auto a_reg = pwmg_a_duty_register_t{duty};
-        a_reg.print();
         driver.write(a_reg);
-        driver.write(pwmg_b_duty_register_t{duty});
-        driver.write(pwmg_c_duty_register_t{duty});
-        delay(2);
-    }
-    for (int percent = 50; percent > 0; percent -= 1) {
-        uint16_t duty = percent * 1000 / 100;
-        auto a_reg = pwmg_a_duty_register_t{duty};
-        a_reg.print();
-        driver.write(a_reg);
-        driver.write(pwmg_b_duty_register_t{duty});
-        driver.write(pwmg_c_duty_register_t{duty});
-        delay(2);
+        driver.write(b_reg);
+        driver.write(c_reg);
+        // a_reg.print();
+        // b_reg.print();
+        // c_reg.print();
+        delay(3);
     }
 
 }
