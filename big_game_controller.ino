@@ -85,7 +85,7 @@ void setup() {
     spi.begin();
     driver.begin();
 
-    driver.write(pwmg_period_register_t{1000});
+    driver.write(pwmg_period_register_t{500});
 
     auto pwmg_ctrl = driver.read<pwmg_ctrl_register_t>();
     assert(pwmg_ctrl.has_value());
@@ -94,11 +94,21 @@ void setup() {
 
     auto drv_ctrl = driver.read<drv_ctrl_register_t>();
     assert(drv_ctrl.has_value());
-    drv_ctrl->tdead_ctrl = tdead_ctrl_enum::_1US;
-    drv_ctrl->dlycmp_en = 1;
+    drv_ctrl->tdead_ctrl = tdead_ctrl_enum::_200NS;
+    drv_ctrl->slew_rate = slew_rate_enum::_230_V_PER_US;
+    // drv_ctrl->dlycmp_en = 1;
     driver.write(drv_ctrl.value());
+
+
+    // driver.write(pwmg_a_duty_register_t{20});
+    // driver.write(pwmg_b_duty_register_t{30});
+    // driver.write(pwmg_c_duty_register_t{40});
 }
 
+uint16_t lookup(uint32_t index) {
+    uint16_t offset = 1;
+    return (sineLookupTable[index] * 3 / 2) + offset;
+}
 
 void loop() {
     for(uint32_t i = 0; i < UINT32_MAX; i++) {
@@ -106,9 +116,9 @@ void loop() {
         uint32_t b_index = (i + 120) % 360;
         uint32_t c_index = (i + 240) % 360;
 
-        pwmg_a_duty_register_t a_reg{sineLookupTable[a_index]};
-        pwmg_b_duty_register_t b_reg{sineLookupTable[b_index]};
-        pwmg_c_duty_register_t c_reg{sineLookupTable[c_index]};
+        pwmg_a_duty_register_t a_reg{lookup(a_index)};
+        pwmg_b_duty_register_t b_reg{lookup(b_index)};
+        pwmg_c_duty_register_t c_reg{lookup(c_index)};
 
         driver.write(a_reg);
         driver.write(b_reg);
@@ -116,7 +126,7 @@ void loop() {
         // a_reg.print();
         // b_reg.print();
         // c_reg.print();
-        delay(3);
+        delay(1);
     }
 
 }
