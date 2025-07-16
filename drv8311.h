@@ -46,7 +46,7 @@ private:
     };
 
     Result transfer(bool is_read, uint16_t addr, uint16_t tx_data) {
-        auto rx_data = m_Bus->transfer(is_read, addr, m_Id, tx_data);
+        auto rx_data = m_Bus->transfer(is_read, m_Id, addr, tx_data);
 
         return Result{
             .status = dev_sts1_register_t::decode(rx_data[0]),
