@@ -25,7 +25,7 @@ const uint16_t sineLookupTable[360] = {
 89, 93, 96, 100, 103, 107, 110, 114, 118, 121, 125, 129, 133, 137, 140, 144, 148, 152, 156, 160,
 164, 169, 173, 177, 181, 185, 190, 194, 198, 202, 207, 211, 215, 220, 224, 228, 233, 237, 241, 246};
 
-TSpi spi{&SPI, 10, {1'000'000, MSBFIRST, SPI_MODE1}}; // max baud rate is 10MHz
+TSpi spi{&SPI, 10, {5'000'000, MSBFIRST, SPI_MODE1}}; // max baud rate is 10MHz
 Drv8311 driver {&spi, 3};
 
 void assert(bool condition) {
@@ -85,7 +85,10 @@ uint16_t lookup(uint32_t index) {
 }
 
 void loop() {
+    uint32_t pause_us = 150;
     for(uint32_t i = 0; i < UINT32_MAX; i++) {
+        uint32_t start_time_us = micros();
+
         uint32_t a_index = i % 360;
         uint32_t b_index = (i + 120) % 360;
         uint32_t c_index = (i + 240) % 360;
@@ -100,7 +103,9 @@ void loop() {
         // a_reg.print();
         // b_reg.print();
         // c_reg.print();
-        delay(1);
+
+        // TODO micros will rollover after an hour
+        delayMicroseconds(start_time_us + pause_us - micros());
     }
 
 }
