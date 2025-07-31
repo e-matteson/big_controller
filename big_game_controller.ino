@@ -35,26 +35,6 @@ void assert(bool condition) {
     }
 }
 
-void scan_duties(int max_percent) {
-    for (int percent = 0; percent <= max_percent; percent += 1) {
-        uint16_t duty = percent * PERIOD / 100;
-        auto a_reg = pwmg_a_duty_register_t{duty};
-        // a_reg.print();
-        driver.write(a_reg);
-        driver.write(pwmg_b_duty_register_t{duty});
-        driver.write(pwmg_c_duty_register_t{duty});
-        delay(2);
-    }
-    for (int percent = max_percent; percent > 0; percent -= 1) {
-        uint16_t duty = percent * PERIOD / 100;
-        auto a_reg = pwmg_a_duty_register_t{duty};
-        // a_reg.print();
-        driver.write(a_reg);
-        driver.write(pwmg_b_duty_register_t{duty});
-        driver.write(pwmg_c_duty_register_t{duty});
-        delay(2);
-    }
-}
 
 void setup() {
     Serial.begin(9600);
