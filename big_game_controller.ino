@@ -1,21 +1,32 @@
 #include "tspi.h"
 #include "drv8311.h"
+#include "mag_sensor.h"
 #include <cstdint>
 
-
+#include <Wire.h>
 
 TSpi spi{&SPI, 10, {5'000'000, MSBFIRST, SPI_MODE1}}; // max baud rate is 10MHz
 Drv8311 driver {&spi, 3};
+
+MagSensor sensor {Wire};
 
 void setup() {
     Serial.begin(9600);
 
     spi.begin();
     driver.begin();
+
+    Wire.begin();
+    if (!sensor.begin()) {
+        Serial.println("failed to initialize tmag5723");
+    }
 }
 
 void loop() {
-    demo_motor();
+    sensor.update();
+    Serial.print("angle=");
+    Serial.println(sensor.getAngle());
+    delay(1000);
 }
 
 void demo_motor() {
