@@ -1,0 +1,111 @@
+#include <SimpleFOC.h>
+
+#include "drv8311.h"
+
+
+// This table is for testing, SimpleFOC won't use it
+// Max value of lookup table should match the period
+static const uint16_t sineLookupTable[360] = {
+250, 254, 259, 263, 267, 272, 276, 280, 285, 289, 293, 298, 302, 306, 310, 315, 319, 323, 327, 331,
+336, 340, 344, 348, 352, 356, 360, 363, 367, 371, 375, 379, 382, 386, 390, 393, 397, 400, 404, 407,
+411, 414, 417, 420, 424, 427, 430, 433, 436, 439, 442, 444, 447, 450, 452, 455, 457, 460, 462, 464,
+467, 469, 471, 473, 475, 477, 478, 480, 482, 483, 485, 486, 488, 489, 490, 491, 493, 494, 495, 495,
+496, 497, 498, 498, 499, 499, 499, 500, 500, 500, 500, 500, 500, 500, 499, 499, 499, 498, 498, 497,
+496, 495, 495, 494, 493, 491, 490, 489, 488, 486, 485, 483, 482, 480, 478, 477, 475, 473, 471, 469,
+467, 464, 462, 460, 457, 455, 452, 450, 447, 444, 442, 439, 436, 433, 430, 427, 424, 420, 417, 414,
+411, 407, 404, 400, 397, 393, 390, 386, 382, 379, 375, 371, 367, 363, 360, 356, 352, 348, 344, 340,
+336, 331, 327, 323, 319, 315, 310, 306, 302, 298, 293, 289, 285, 280, 276, 272, 267, 263, 259, 254,
+250, 246, 241, 237, 233, 228, 224, 220, 215, 211, 207, 202, 198, 194, 190, 185, 181, 177, 173, 169,
+164, 160, 156, 152, 148, 144, 140, 137, 133, 129, 125, 121, 118, 114, 110, 107, 103, 100, 96, 93,
+89, 86, 83, 80, 76, 73, 70, 67, 64, 61, 58, 56, 53, 50, 48, 45, 43, 40, 38, 36,
+33, 31, 29, 27, 25, 23, 22, 20, 18, 17, 15, 14, 12, 11, 10, 9, 7, 6, 5, 5,
+4, 3, 2, 2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 3,
+4, 5, 5, 6, 7, 9, 10, 11, 12, 14, 15, 17, 18, 20, 22, 23, 25, 27, 29, 31,
+33, 36, 38, 40, 43, 45, 48, 50, 53, 56, 58, 61, 64, 67, 70, 73, 76, 80, 83, 86,
+89, 93, 96, 100, 103, 107, 110, 114, 118, 121, 125, 129, 133, 137, 140, 144, 148, 152, 156, 160,
+164, 169, 173, 177, 181, 185, 190, 194, 198, 202, 207, 211, 215, 220, 224, 228, 233, 237, 241, 246};
+
+
+class Motor : public BLDCDriver {
+    Motor(TSpi* bus, uint8_t id)
+        : BLDCDriver()
+        , m_Chip(bus, id) {
+    }
+
+    int init() override {
+        m_Chip.begin();
+
+        m_Chip.write(pwmg_period_register_t{1000});
+
+        auto pwmg_ctrl = m_Chip.read<pwmg_ctrl_register_t>();
+        assert(pwmg_ctrl.has_value());
+        pwmg_ctrl->pwm_en = 1;
+        m_Chip.write(pwmg_ctrl.value());
+
+        auto drv_ctrl = m_Chip.read<drv_ctrl_register_t>();
+        assert(drv_ctrl.has_value());
+        drv_ctrl->tdead_ctrl = tdead_ctrl_enum::_1US;
+        drv_ctrl->dlycmp_en = 1;
+        m_Chip.write(drv_ctrl.value());
+
+        // TODO what does the return value mean? should it be 0 or not 0?
+        return 0;
+    }
+
+    /** Enable hardware */
+    void enable() override {
+        // TODO
+    }
+
+    /** Disable hardware */
+    void disable() override {
+        // TODO
+    }
+
+    /**
+    * Set phase voltages to the hardware
+    *
+    * @param Ua - phase A voltage
+    * @param Ub - phase B voltage
+    * @param Uc - phase C voltage
+    */
+    void setPwm(float Ua, float Ub, float Uc) override {
+        // TODO 0-1? 0-100? 0-voltage_limit?
+        Ua = constrain(Ua, 0, m_VoltageLimit);
+        Ub = constrain(Ub, 0, m_VoltageLimit);
+        Uc = constrain(Uc, 0, m_VoltageLimit);
+
+        dc_a = constrain(Ua / m_VoltagePowerSupply, 0.0f, 1.0f);
+        dc_b = constrain(Ub / m_VoltagePowerSupply, 0.0f, 1.0f);
+        dc_c = constrain(Uc / m_VoltagePowerSupply, 0.0f, 1.0f);
+
+        // pwmg_a_duty_register_t a_reg{a};
+        // pwmg_b_duty_register_t b_reg{b};
+        // pwmg_c_duty_register_t c_reg{c};
+
+        // driver.write(a_reg);
+        // driver.write(b_reg);
+        // driver.write(c_reg);
+    }
+
+    /**
+    * Set phase state, enable/disable
+    *
+    * @param sc - phase A state : active / disabled ( high impedance )
+    * @param sb - phase B state : active / disabled ( high impedance )
+    * @param sa - phase C state : active / disabled ( high impedance )
+    */
+    void setPhaseState(PhaseState sa, PhaseState sb, PhaseState sc) override {
+        // The BLDCDriver6PWM class ignores phase state (at least on the teensy3 implementation)
+        // TODO can we ignore it too?
+    }
+
+private:
+    uint16_t m_Period = 500;
+
+    // TODO What should the voltage limit and supply voltage actually be?
+    const float m_VoltageLimit = 3;
+    const float m_VoltagePowerSupply= 4;
+
+    Drv8311 m_Chip;
+};
