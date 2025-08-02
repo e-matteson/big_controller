@@ -1,5 +1,6 @@
 #pragma once
 
+#include <array>
 #include <SPI.h>
 
 class TSpi {
@@ -32,20 +33,19 @@ public:
            (is_read << 15) | (id << 11) | (addr << 3) | (addr_parity << 0);
        uint16_t data_bytes = (data_parity << 15) | data;
 
-       uint8_t tx_data[NUM_READ_BYTES+1] = {
+       uint8_t buffer[NUM_READ_BYTES+1] = {
            static_cast<uint8_t>((command_bytes >> 8) & 0xFF),
            static_cast<uint8_t>(command_bytes & 0xFF),
            static_cast<uint8_t>((data_bytes >> 8) & 0xFF),
            static_cast<uint8_t>(data_bytes & 0xFF),
        };
-       uint8_t rx_data[NUM_READ_BYTES+1] = {0};
 
        digitalWrite(m_CsPin, LOW);
        m_Spi->beginTransaction(m_Settings);
-       m_Spi->transfer(tx_data, rx_data, NUM_READ_BYTES+1);
+       m_Spi->transfer(buffer, NUM_READ_BYTES+1);
        m_Spi->endTransaction();
        digitalWrite(m_CsPin, HIGH);
-       std::array<uint8_t, NUM_READ_BYTES> rx_data_out = {rx_data[1], rx_data[2], rx_data[3]};
+       std::array<uint8_t, NUM_READ_BYTES> rx_data_out = {buffer[1], buffer[2], buffer[3]};
        return rx_data_out;
     }
 
