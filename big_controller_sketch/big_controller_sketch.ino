@@ -1,10 +1,12 @@
 #include "tspi.h"
 #include "motor.h"
 #include "mag_sensor.h"
-#include <cstdint>
 
+#include <cstdint>
+#include <TCA9555.h>
 #include <Wire.h>
 
+// Pins on the MCU
 int bumper_l = 0; // PA22
 int drv_sleep_n = 1; // PA23
 int io_expander_int_n = 2; // PA10
@@ -27,14 +29,23 @@ int bumper_r = 18; // PA00,
 int button_b = 19; // PA01
 int led_clk = 20; // PA20
 int led_data = 21; // PA21
-
 int ana_trigger_r = 22; // PA11
 int ana_trigger_l = 23; // PB03
+
+// Pins on the expander
+int expander_left_x_enc_vcc = 0;
+int expander_left_y_enc_vcc = 1;
+int expander_right_x_enc_vcc = 2;
+int expander_right_y_enc_vcc = 3;
+int expander_rumble_l = 4;
+int expander_rumble_r = 5;
+
 
 TSpi spi{&SPI, 10, {5'000'000, MSBFIRST, SPI_MODE1}}; // max baud rate is 10MHz
 Motor motor {&spi, 3};
 
 MagSensor sensor {Wire};
+TCA9535 expander(0x20);
 
 void setup() {
     Serial.begin(9600);
@@ -46,12 +57,21 @@ void setup() {
     if (!sensor.begin()) {
         Serial.println("failed to initialize tmag5723");
     }
+    // Mask where 1 is input and 0 is output
+    expander.pinMode16(0xFFFF);
 }
 
 void loop() {
     sensor.update();
     Serial.print("angle=");
     Serial.println(sensor.getAngle());
+
+    for (int i = 0; i < 16; i++) {
+        Serial.print(expander.read1(i));
+        Serial.print(' ');
+    }
+    Serial.println();
+
     delay(1000);
 }
 
