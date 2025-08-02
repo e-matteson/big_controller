@@ -1,0 +1,62 @@
+{
+    "packages": [
+        {
+            "name": "bigcontroller",
+            "maintainer": "e-matteson",
+            "websiteURL": "https://github.com/e-matteson/big_controller",
+            "help": {
+                "online": "https://github.com/e-matteson/big_controller"
+            },
+            "platforms": [
+                {
+                    "name": "Big Controller Arduino SAMD (32-bits ARM Cortex-M0+) Board",
+                    "architecture": "samd",
+                    "version": "1.0.0",
+                    "category": "Contributed",
+                    "url": "https://github.com/e-matteson/big_controller/raw/refs/heads/master/custom_arduino_board/bigcontroller-1.0.0.zip",
+                    "archiveFileName": "bigcontroller-1.0.0.zip",
+                    "checksum": "SHA-256:17debd4a84ecdb99de1bdaafaf1cd98de74681d8ed323a1143570283f72d71eb",
+                    "size": "2199526",
+                    "boards": [
+                        {
+                            "name": "Big Controller"
+                        }
+                    ],
+                    "toolsDependencies": [
+                        {
+                            "packager": "arduino",
+                            "name": "arm-none-eabi-gcc",
+                            "version": "4.8.3-2014q1"
+                        },
+                        {
+                            "packager": "arduino",
+                            "name": "bossac",
+                            "version": "1.7.0"
+                        },
+                        {
+                            "packager": "arduino",
+                            "name": "openocd",
+                            "version": "0.9.0-arduino6-static"
+                        },
+                        {
+                            "packager": "arduino",
+                            "name": "CMSIS",
+                            "version": "4.5.0"
+                        },
+                        {
+                            "packager": "arduino",
+                            "name": "CMSIS-Atmel",
+                            "version": "1.1.0"
+                        },
+                        {
+                            "packager": "arduino",
+                            "name": "arduinoOTA",
+                            "version": "1.2.0"
+                        }
+                    ]
+                }
+            ],
+            "tools": []
+        }
+    ]
+}
