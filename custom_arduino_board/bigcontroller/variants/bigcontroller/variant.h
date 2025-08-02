@@ -91,14 +91,15 @@ static const uint8_t A6  = PIN_A6;
 
 // SPI Interfaces
 // --------------
-#define SPI_INTERFACES_COUNT 2
+#define SPI_INTERFACES_COUNT 1
  
 // SPI
-#define PIN_SPI_MISO  (10u)
-#define PIN_SPI_MOSI  (8u)
-#define PIN_SPI_SCK   (9u)
-#define PIN_SPI_SS    (4u)
-#define PERIPH_SPI    sercom1
+#define PIN_SPI_MISO  (20u)
+#define PIN_SPI_MOSI  (18u)
+#define PIN_SPI_SCK   (19u)
+#define PIN_SPI_SS    (21u)
+#define PERIPH_SPI    sercom0
+// TODO what should PAD_SPI_TX and PAD_SPI_RX be? I can't figure out the pattern.
 #define PAD_SPI_TX    SPI_PAD_0_SCK_1
 #define PAD_SPI_RX    SERCOM_RX_PAD_3
 
@@ -107,25 +108,25 @@ static const uint8_t MOSI = PIN_SPI_MOSI;
 static const uint8_t MISO = PIN_SPI_MISO;
 static const uint8_t SCK  = PIN_SPI_SCK;
 
-// SPI1: Connected to SD
-#define PIN_SPI1_MISO (29u)
-#define PIN_SPI1_MOSI (26u)
-#define PIN_SPI1_SCK  (27u)
-#define PIN_SPI1_SS   (28u)
-#define PERIPH_SPI1   sercom4
-#define PAD_SPI1_TX   SPI_PAD_0_SCK_1
-#define PAD_SPI1_RX   SERCOM_RX_PAD_3
-static const uint8_t SS1   = PIN_SPI1_SS;
-static const uint8_t MOSI1 = PIN_SPI1_MOSI;
-static const uint8_t MISO1 = PIN_SPI1_MISO;
-static const uint8_t SCK1  = PIN_SPI1_SCK;
+// // SPI1: Connected to SD
+// #define PIN_SPI1_MISO (29u)
+// #define PIN_SPI1_MOSI (26u)
+// #define PIN_SPI1_SCK  (27u)
+// #define PIN_SPI1_SS   (28u)
+// #define PERIPH_SPI1   sercom4
+// #define PAD_SPI1_TX   SPI_PAD_0_SCK_1
+// #define PAD_SPI1_RX   SERCOM_RX_PAD_3
+// static const uint8_t SS1   = PIN_SPI1_SS;
+// static const uint8_t MOSI1 = PIN_SPI1_MOSI;
+// static const uint8_t MISO1 = PIN_SPI1_MISO;
+// static const uint8_t SCK1  = PIN_SPI1_SCK;
 
-// Needed for SD library
-#define SDCARD_SPI      SPI1
-#define SDCARD_MISO_PIN PIN_SPI1_MISO
-#define SDCARD_MOSI_PIN PIN_SPI1_MOSI
-#define SDCARD_SCK_PIN  PIN_SPI1_SCK
-#define SDCARD_SS_PIN   PIN_SPI1_SS
+// // Needed for SD library
+// #define SDCARD_SPI      SPI1
+// #define SDCARD_MISO_PIN PIN_SPI1_MISO
+// #define SDCARD_MOSI_PIN PIN_SPI1_MOSI
+// #define SDCARD_SCK_PIN  PIN_SPI1_SCK
+// #define SDCARD_SS_PIN   PIN_SPI1_SS
 
 // Wire Interfaces
 // ---------------
@@ -143,7 +144,8 @@ static const uint8_t SCL = PIN_WIRE_SCL;
 // ---
 #define PIN_USB_DM          (22ul)
 #define PIN_USB_DP          (23ul)
-#define PIN_USB_HOST_ENABLE (24ul)
+// TODO we're using 24ul for BUTTON_HAT_L, is that ok?
+// #define PIN_USB_HOST_ENABLE (24ul)
 
 // I2S Interfaces
 // --------------
