@@ -132,10 +132,10 @@ static const uint8_t SCK1  = PIN_SPI1_SCK;
 #define WIRE_INTERFACES_COUNT 1
 
 // Wire
-#define PIN_WIRE_SDA        (11u)
-#define PIN_WIRE_SCL        (12u)
-#define PERIPH_WIRE         sercom2
-#define WIRE_IT_HANDLER     SERCOM2_Handler
+#define PIN_WIRE_SDA        (8u)
+#define PIN_WIRE_SCL        (9u)
+#define PERIPH_WIRE         sercom1
+#define WIRE_IT_HANDLER     SERCOM1_Handler
 static const uint8_t SDA = PIN_WIRE_SDA;
 static const uint8_t SCL = PIN_WIRE_SCL;
 
