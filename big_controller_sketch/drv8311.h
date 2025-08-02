@@ -16,22 +16,6 @@ public:
     Drv8311(TSpi* bus, uint8_t id): m_Bus(bus), m_Id(id) {}
 
     void begin() {
-        // Clear the power-on-reset fault (and any others that happen to be
-        // active)
-        write(flt_clr_register_t{.flt_clr = 1});
-
-        write(pwmg_period_register_t{m_Period});
-
-        auto pwmg_ctrl = read<pwmg_ctrl_register_t>();
-        assert(pwmg_ctrl.has_value());
-        pwmg_ctrl->pwm_en = 1;
-        write(pwmg_ctrl.value());
-
-        auto drv_ctrl = read<drv_ctrl_register_t>();
-        assert(drv_ctrl.has_value());
-        drv_ctrl->tdead_ctrl = tdead_ctrl_enum::_200NS;
-        drv_ctrl->slew_rate = slew_rate_enum::_230_V_PER_US;
-        write(drv_ctrl.value());
     }
 
     template <typename Reg>
@@ -43,15 +27,6 @@ public:
     std::optional<Reg> read() {
         return Reg::decode(transfer(true, Reg::address(), 0).data);
     }
-
-    uint16_t lookup(uint32_t index) {
-        uint16_t offset = 0;
-        uint16_t scale_numerator = 2;
-        uint16_t scale_denominator = 3;
-        uint32_t scaled_duty = sineLookupTable[index] * scale_numerator / scale_denominator;
-        return  min(scaled_duty + offset, m_Period);
-    }
-
 
 private:
     struct Result {

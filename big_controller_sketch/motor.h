@@ -27,6 +27,7 @@ static const uint16_t sineLookupTable[360] = {
 
 
 class Motor : public BLDCDriver {
+public: 
     Motor(TSpi* bus, uint8_t id)
         : BLDCDriver()
         , m_Chip(bus, id) {
@@ -60,6 +61,21 @@ class Motor : public BLDCDriver {
     /** Disable hardware */
     void disable() override {
         // TODO
+    }
+
+    // In range 0-100
+    void setDutyCyclePercents(uint8_t a, uint8_t b, uint8_t c) {
+        auto compute = [this](uint8_t percentage) {
+            return static_cast<uint16_t>(constrain(percentage * m_Period / 100, 0, 100));
+        };
+
+        pwmg_a_duty_register_t a_reg{compute(a)};
+        pwmg_b_duty_register_t b_reg{compute(b)};
+        pwmg_c_duty_register_t c_reg{compute(c)};
+
+        m_Chip.write(a_reg);
+        m_Chip.write(b_reg);
+        m_Chip.write(c_reg);
     }
 
     /**
@@ -100,7 +116,21 @@ class Motor : public BLDCDriver {
         // TODO can we ignore it too?
     }
 
+    void setFromSineTable(uint32_t offset) {
+        uint32_t a_index = offset % 360;
+        uint32_t b_index = (offset + 120) % 360;
+        uint32_t c_index = (offset + 240) % 360;
+        setDutyCyclePercents(lookup(a_index), lookup(b_index), lookup(c_index));
+    }
 private:
+    uint16_t lookup(uint32_t index) {
+        uint16_t offset = 0;
+        uint16_t scale_numerator = 2;
+        uint16_t scale_denominator = 3;
+        uint32_t scaled_duty = sineLookupTable[index] * scale_numerator / scale_denominator;
+        return  min(scaled_duty + offset, m_Period);
+    }
+
     uint16_t m_Period = 500;
 
     // TODO What should the voltage limit and supply voltage actually be?
