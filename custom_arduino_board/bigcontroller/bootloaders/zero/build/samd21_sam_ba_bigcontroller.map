@@ -11,9 +11,9 @@ Archive member included to satisfy reference by file (symbol)
 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libnosys.a(_exit.o)
                               /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-exit.o) (_exit)
 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-memcpy-stub.o)
-                              samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o (memcpy)
+                              samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o (memcpy)
 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-strlen.o)
-                              samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o (strlen)
+                              samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o (strlen)
 
 Allocating common symbols
 Common symbol       size              file
@@ -125,7 +125,7 @@ LOAD /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2
 LOAD /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtbegin.o
 LOAD /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/crt0.o
 START GROUP
-LOAD samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+LOAD samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
 LOAD /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libm.a
 END GROUP
 START GROUP
@@ -148,30 +148,30 @@ LOAD /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2
 
 .vectors        0x0000000000000000       0x40
  *(.isr_vector)
- .isr_vector    0x0000000000000000       0x40 samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+ .isr_vector    0x0000000000000000       0x40 samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                 0x0000000000000000                exception_table
 
-.text           0x0000000000000040     0x1600
+.text           0x0000000000000040     0x1620
  *(.text*)
  .text          0x0000000000000040       0x48 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtbegin.o
- .text          0x0000000000000088      0xed8 samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+ .text          0x0000000000000088      0xed8 samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                 0x0000000000000f14                Reset_Handler
- .text.startup  0x0000000000000f60      0x3c4 samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+ .text.startup  0x0000000000000f60      0x3dc samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                 0x0000000000000f60                main
- .text.memset   0x0000000000001324       0x10 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-memset.o)
-                0x0000000000001324                memset
- .text.memcpy   0x0000000000001334       0x12 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-memcpy-stub.o)
-                0x0000000000001334                memcpy
- .text          0x0000000000001346        0xe /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-strlen.o)
-                0x0000000000001346                strlen
+ .text.memset   0x000000000000133c       0x10 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-memset.o)
+                0x000000000000133c                memset
+ .text.memcpy   0x000000000000134c       0x12 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-memcpy-stub.o)
+                0x000000000000134c                memcpy
+ .text          0x000000000000135e        0xe /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-strlen.o)
+                0x000000000000135e                strlen
  *(.init)
- .init          0x0000000000001354        0x4 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crti.o
-                0x0000000000001354                _init
- .init          0x0000000000001358        0x8 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtn.o
+ .init          0x000000000000136c        0x4 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crti.o
+                0x000000000000136c                _init
+ .init          0x0000000000001370        0x8 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtn.o
  *(.fini)
- .fini          0x0000000000001360        0x4 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crti.o
-                0x0000000000001360                _fini
- .fini          0x0000000000001364        0x8 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtn.o
+ .fini          0x0000000000001378        0x4 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crti.o
+                0x0000000000001378                _fini
+ .fini          0x000000000000137c        0x8 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtn.o
  *crtbegin.o(.ctors)
  *crtbegin?.o(.ctors)
  *(EXCLUDE_FILE(*crtend.o *crtend?.o) .ctors)
@@ -183,47 +183,48 @@ LOAD /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2
  *(SORT_BY_NAME(.dtors.*))
  *(.dtors)
  *(.rodata*)
- .rodata        0x000000000000136c      0x284 samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+ .rodata        0x0000000000001384      0x284 samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
  .rodata.str1.1
-                0x00000000000015f0       0x4c samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
-                                         0x4f (size before relaxing)
+                0x0000000000001608       0x51 samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
+                                         0x54 (size before relaxing)
  *(.eh_frame*)
- .eh_frame      0x000000000000163c        0x0 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtbegin.o
- .eh_frame      0x000000000000163c        0x4 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtend.o
+ *fill*         0x0000000000001659        0x3 
+ .eh_frame      0x000000000000165c        0x0 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtbegin.o
+ .eh_frame      0x000000000000165c        0x4 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtend.o
 
-.glue_7         0x0000000000001640        0x0
- .glue_7        0x0000000000001640        0x0 linker stubs
+.glue_7         0x0000000000001660        0x0
+ .glue_7        0x0000000000001660        0x0 linker stubs
 
-.glue_7t        0x0000000000001640        0x0
- .glue_7t       0x0000000000001640        0x0 linker stubs
+.glue_7t        0x0000000000001660        0x0
+ .glue_7t       0x0000000000001660        0x0 linker stubs
 
-.vfp11_veneer   0x0000000000001640        0x0
- .vfp11_veneer  0x0000000000001640        0x0 linker stubs
+.vfp11_veneer   0x0000000000001660        0x0
+ .vfp11_veneer  0x0000000000001660        0x0 linker stubs
 
-.v4_bx          0x0000000000001640        0x0
- .v4_bx         0x0000000000001640        0x0 linker stubs
+.v4_bx          0x0000000000001660        0x0
+ .v4_bx         0x0000000000001660        0x0 linker stubs
 
-.iplt           0x0000000000001640        0x0
- .iplt          0x0000000000001640        0x0 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtbegin.o
+.iplt           0x0000000000001660        0x0
+ .iplt          0x0000000000001660        0x0 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtbegin.o
 
-.rel.dyn        0x0000000000001640        0x0
- .rel.iplt      0x0000000000001640        0x0 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtbegin.o
+.rel.dyn        0x0000000000001660        0x0
+ .rel.iplt      0x0000000000001660        0x0 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtbegin.o
 
 .ARM.extab
  *(.ARM.extab* .gnu.linkonce.armextab.*)
-                0x0000000000001640                __exidx_start = .
+                0x0000000000001660                __exidx_start = .
 
 .ARM.exidx
  *(.ARM.exidx* .gnu.linkonce.armexidx.*)
-                0x0000000000001640                __exidx_end = .
-                0x0000000000001640                __etext = .
+                0x0000000000001660                __exidx_end = .
+                0x0000000000001660                __etext = .
                 0x0000000000002000                PROVIDE (__sketch_vectors_ptr, (ORIGIN (FLASH) + LENGTH (FLASH)))
 
-.data           0x0000000020000000       0x5c load address 0x0000000000001640
+.data           0x0000000020000000       0x5c load address 0x0000000000001660
                 0x0000000020000000                __data_start__ = .
  *(vtable)
  *(.data*)
- .data          0x0000000020000000       0x51 samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+ .data          0x0000000020000000       0x51 samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                 0x0000000020000054                . = ALIGN (0x4)
  *fill*         0x0000000020000051        0x3 
                 0x0000000020000054                PROVIDE (__preinit_array_start, .)
@@ -245,15 +246,15 @@ LOAD /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2
                 0x000000002000005c                . = ALIGN (0x4)
                 0x000000002000005c                __data_end__ = .
 
-.igot.plt       0x000000002000005c        0x0 load address 0x000000000000169c
+.igot.plt       0x000000002000005c        0x0 load address 0x00000000000016bc
  .igot.plt      0x000000002000005c        0x0 /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtbegin.o
 
-.bss            0x000000002000005c      0x354 load address 0x000000000000169c
+.bss            0x000000002000005c      0x354 load address 0x00000000000016bc
                 0x000000002000005c                . = ALIGN (0x4)
                 0x000000002000005c                __bss_start__ = .
  *(.bss*)
  .bss           0x000000002000005c       0x1c /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtbegin.o
- .bss           0x0000000020000078      0x338 samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+ .bss           0x0000000020000078      0x338 samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
  *(COMMON)
                 0x00000000200003b0                . = ALIGN (0x4)
                 0x00000000200003b0                __bss_end__ = .
@@ -271,7 +272,7 @@ LOAD /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2
                 0x0000000020007c00                PROVIDE (__stack, __StackTop)
                 0x0000000020007bff                __ram_end__ = ((ORIGIN (RAM) + LENGTH (RAM)) - 0x1)
                 0x0000000000000001                ASSERT ((__StackLimit >= __HeapLimit), region RAM overflowed with stack)
-OUTPUT(build/samd21_sam_ba_arduino_nano_33_iot.elf elf32-littlearm)
+OUTPUT(build/samd21_sam_ba_bigcontroller.elf elf32-littlearm)
 
 .ARM.attributes
                 0x0000000000000000       0x28
@@ -280,7 +281,7 @@ OUTPUT(build/samd21_sam_ba_arduino_nano_33_iot.elf elf32-littlearm)
  .ARM.attributes
                 0x000000000000001e       0x2c /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtbegin.o
  .ARM.attributes
-                0x000000000000004a       0x30 samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+                0x000000000000004a       0x30 samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
  .ARM.attributes
                 0x000000000000007a       0x2c /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-memset.o)
  .ARM.attributes
@@ -293,7 +294,7 @@ OUTPUT(build/samd21_sam_ba_arduino_nano_33_iot.elf elf32-littlearm)
                 0x000000000000011a       0x1e /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtn.o
 
 .comment        0x0000000000000000       0x7e
- .comment       0x0000000000000000       0x7e samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+ .comment       0x0000000000000000       0x7e samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                                          0x7f (size before relaxing)
 
 .debug_frame    0x0000000000000000       0x48
@@ -311,7 +312,7 @@ NMI_Handler                                       build/board_startup.o (symbol 
 PAGES                                             build/sam_ba_monitor.o (symbol from plugin)
 PAGE_SIZE                                         build/sam_ba_monitor.o (symbol from plugin)
 PendSV_Handler                                    build/board_startup.o (symbol from plugin)
-Reset_Handler                                     samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+Reset_Handler                                     samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                                                   build/board_startup.o (symbol from plugin)
 RomBOOT_ExtendedCapabilities                      build/sam_ba_monitor.o (symbol from plugin)
 RomBOOT_Version                                   build/sam_ba_monitor.o (symbol from plugin)
@@ -339,22 +340,22 @@ USB_SetAddress                                    build/board_driver_usb.o (symb
 USB_Write                                         build/board_driver_usb.o (symbol from plugin)
                                                   build/sam_ba_cdc.o (symbol from plugin)
                                                   build/sam_ba_usb.o (symbol from plugin)
-__StackTop                                        samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+__StackTop                                        samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                                                   build/board_startup.o (symbol from plugin)
-__bss_end__                                       samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+__bss_end__                                       samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                                                   build/board_startup.o (symbol from plugin)
                                                   /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/crt0.o
-__bss_start__                                     samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+__bss_start__                                     samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                                                   build/board_startup.o (symbol from plugin)
                                                   /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/crt0.o
 __call_exitprocs                                  /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-exit.o)
-__data_end__                                      samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+__data_end__                                      samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                                                   build/board_startup.o (symbol from plugin)
-__data_start__                                    samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+__data_start__                                    samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                                                   build/board_startup.o (symbol from plugin)
 __deregister_frame_info                           /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtbegin.o
 __dso_handle                                      /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/thumb/v6-m/crtbegin.o
-__etext                                           samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+__etext                                           samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                                                   build/board_startup.o (symbol from plugin)
 __init_array_end                                  /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-init.o)
 __init_array_start                                /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-init.o)
@@ -367,7 +368,7 @@ __register_frame_info                             /home/evan-matteson/.arduino15
 __sf_fake_stderr                                  /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-impure.o)
 __sf_fake_stdin                                   /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-impure.o)
 __sf_fake_stdout                                  /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-impure.o)
-__sketch_vectors_ptr                              samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+__sketch_vectors_ptr                              samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                                                   build/main.o (symbol from plugin)
 __stack                                           /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/crt0.o
 _exit                                             /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libnosys.a(_exit.o)
@@ -407,7 +408,7 @@ current_number                                    build/sam_ba_monitor.o (symbol
 data                                              build/sam_ba_monitor.o (symbol from plugin)
 erased_from                                       build/sam_ba_monitor.o (symbol from plugin)
 error_timeout                                     build/sam_ba_serial.o (symbol from plugin)
-exception_table                                   samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+exception_table                                   samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                                                   build/board_startup.o (symbol from plugin)
 exit                                              /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-exit.o)
                                                   /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/crt0.o
@@ -425,14 +426,14 @@ ledTargetValue                                    build/board_driver_led.o (symb
 length                                            build/sam_ba_monitor.o (symbol from plugin)
 line_coding                                       build/sam_ba_cdc.o (symbol from plugin)
                                                   build/sam_ba_usb.o (symbol from plugin)
-main                                              samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+main                                              samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                                                   build/main.o (symbol from plugin)
                                                   build/board_startup.o (symbol from plugin)
                                                   /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/crt0.o
 memcpy                                            /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-memcpy-stub.o)
-                                                  samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+                                                  samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
 memset                                            /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-memset.o)
-                                                  samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+                                                  samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
                                                   /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/crt0.o
 mode_of_transfer                                  build/sam_ba_serial.o (symbol from plugin)
 ptr                                               build/sam_ba_monitor.o (symbol from plugin)
@@ -477,7 +478,7 @@ size_of_data                                      build/sam_ba_serial.o (symbol 
 software_init_hook                                /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/crt0.o
 sp                                                build/sam_ba_monitor.o (symbol from plugin)
 strlen                                            /home/evan-matteson/.arduino15/packages/arduino/tools/arm-none-eabi-gcc/7-2017q4/bin/../lib/gcc/arm-none-eabi/7.2.1/../../../../arm-none-eabi/lib/thumb/v6-m/libc_nano.a(lib_a-strlen.o)
-                                                  samd21_sam_ba_arduino_nano_33_iot.elf.ltrans0.ltrans.o
+                                                  samd21_sam_ba_bigcontroller.elf.ltrans0.ltrans.o
 txLEDPulse                                        build/sam_ba_monitor.o (symbol from plugin)
 u32tmp                                            build/sam_ba_monitor.o (symbol from plugin)
 uart_basic_init                                   build/board_driver_serial.o (symbol from plugin)

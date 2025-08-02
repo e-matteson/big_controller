@@ -1,4 +1,5 @@
-# Copyright (c) 2014-2017 Arduino LLC.  All right reserved.
+# Orignal: Copyright (c) 2014-2017 Arduino LLC.  All right reserved.
+# Modified by e-matteson
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Lesser General Public
@@ -14,40 +15,43 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-# Arduino MKRZero
+# Big Controller (based on Arduino MKRZero)
 # ---------------
-mkrzero.name=Arduino MKR Zero
-mkrzero.vid.0=0x2341
-mkrzero.pid.0=0x804f
-mkrzero.vid.1=0x2341
-mkrzero.pid.1=0x004f
-mkrzero.upload_port.0.vid=0x2341
-mkrzero.upload_port.0.pid=0x804f
-mkrzero.upload_port.1.vid=0x2341
-mkrzero.upload_port.1.pid=0x004f
-mkrzero.upload_port.2.board=mkrzero
+bigcontroller.name=Big Controller
+bigcontroller.vid.0=0x2341
+bigcontroller.pid.0=0x804f
+bigcontroller.vid.1=0x2341
+bigcontroller.pid.1=0x004f
+bigcontroller.upload_port.0.vid=0x2341
+bigcontroller.upload_port.0.pid=0x804f
+bigcontroller.upload_port.1.vid=0x2341
+bigcontroller.upload_port.1.pid=0x004f
+bigcontroller.upload_port.2.board=bigcontroller
 
-mkrzero.upload.tool=bossac
-mkrzero.upload.tool.default=bossac
-mkrzero.upload.tool.network=arduino_ota
-mkrzero.upload.protocol=sam-ba
-mkrzero.upload.maximum_size=262144
-mkrzero.upload.maximum_data_size=32768
-mkrzero.upload.use_1200bps_touch=true
-mkrzero.upload.wait_for_upload_port=true
-mkrzero.upload.native_usb=true
-mkrzero.build.mcu=cortex-m0plus
-mkrzero.build.f_cpu=48000000L
-mkrzero.build.usb_product="Arduino MKRZero"
-mkrzero.build.usb_manufacturer="Arduino LLC"
-mkrzero.build.board=SAMD_MKRZERO
-mkrzero.build.core=arduino
-mkrzero.build.extra_flags=-DUSE_ARDUINO_MKR_PIN_LAYOUT -D__SAMD21G18A__ {build.usb_flags}
-mkrzero.build.ldscript=linker_scripts/gcc/flash_with_bootloader.ld
-mkrzero.build.openocdscript=openocd_scripts/arduino_zero.cfg
-mkrzero.build.variant=mkrzero
-mkrzero.build.vid=0x2341
-mkrzero.build.pid=0x804f
-mkrzero.bootloader.tool=openocd
-mkrzero.bootloader.tool.default=openocd
-mkrzero.bootloader.file=mkrzero/samd21_sam_ba_arduino_mkrzero.bin
+bigcontroller.upload.tool=bossac
+bigcontroller.upload.tool.default=bossac
+bigcontroller.upload.tool.network=arduino_ota
+bigcontroller.upload.protocol=sam-ba
+bigcontroller.upload.maximum_size=262144
+bigcontroller.upload.maximum_data_size=32768
+bigcontroller.upload.use_1200bps_touch=true
+bigcontroller.upload.wait_for_upload_port=true
+bigcontroller.upload.native_usb=true
+bigcontroller.build.mcu=cortex-m0plus
+bigcontroller.build.f_cpu=48000000L
+bigcontroller.build.usb_product="Big Controller (MKRZero)"
+bigcontroller.build.usb_manufacturer="Arduino LLC"
+bigcontroller.build.board=BIGCONTROLLER
+bigcontroller.build.core=arduino
+
+# Without CRYSTALLESS it hangs at startup trying to set up oscillators
+bigcontroller.build.extra_flags=-DCRYSTALLESS -DUSE_ARDUINO_MKR_PIN_LAYOUT -D__SAMD21G18A__ {build.usb_flags}
+
+bigcontroller.build.ldscript=linker_scripts/gcc/flash_with_bootloader.ld
+bigcontroller.build.openocdscript=openocd_scripts/arduino_zero.cfg
+bigcontroller.build.variant=bigcontroller
+bigcontroller.build.vid=0x2341
+bigcontroller.build.pid=0x804f
+bigcontroller.bootloader.tool=openocd
+bigcontroller.bootloader.tool.default=openocd
+bigcontroller.bootloader.file=bigcontroller/samd21_sam_ba_bigcontroller.bin
