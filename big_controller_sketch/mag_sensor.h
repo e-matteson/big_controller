@@ -14,8 +14,9 @@
 
 class MagSensor : public Sensor {
 public:
-    MagSensor(TwoWire &wirePort)
+    MagSensor(TwoWire &wirePort, uint8_t address)
         : Sensor()
+        , m_I2cAddress(address)
         , m_WirePort(wirePort) {
     }
 
@@ -37,7 +38,7 @@ protected:
         return m_Sensor.getAngleResult();
     }
 
-    const uint8_t m_I2cAddress = 0x78;
+    uint8_t m_I2cAddress;
     TwoWire& m_WirePort;
     TMAG5273 m_Sensor;
 };

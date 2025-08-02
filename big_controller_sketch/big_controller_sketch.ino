@@ -44,7 +44,7 @@ int expander_rumble_r = 5;
 TSpi spi{&SPI, 10, {5'000'000, MSBFIRST, SPI_MODE1}}; // max baud rate is 10MHz
 Motor motor {&spi, 3};
 
-MagSensor sensor {Wire};
+MagSensor sensor {Wire, 0x78};
 TCA9535 expander(0x20);
 
 void setup() {
