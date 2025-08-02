@@ -69,7 +69,7 @@ extern "C" unsigned int PINCOUNT_fn();
 
 // LEDs
 // ----
-#define PIN_LED     (13u)
+#define PIN_LED     (12u)
 #define LED_BUILTIN PIN_LED
 
 // Analog pins

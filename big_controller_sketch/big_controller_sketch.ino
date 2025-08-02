@@ -7,30 +7,30 @@
 #include <Wire.h>
 
 // Pins on the MCU
-int bumper_l = 0; // PA22
+int dpad_right = 0; // PA22
 int drv_sleep_n = 1; // PA23
-int io_expander_int_n = 2; // PA10
-int button_extra = 3; // PB10
-int button_a = 4; // PB11
-int button_x = 5; // PA19
-int dpad_left = 6; // PA02
-int button_start = 7; // PB02
-int button_hat_l = 8; // PA18
-int button_back = 9; // PA03
-int button_hat_r = 10; // PA12
-int button_y = 11; // PA13
-int dpad_up = 12; // PA27
-int usr_led_g = 13; // PA09
-int usr_led_r = 14; // PA08
-int dpad_right = 15; // PA28
-int button_home = 16; // PB08
-int dpad_down = 17; // PB09
-int bumper_r = 18; // PA00,
-int button_b = 19; // PA01
-int led_clk = 20; // PA20
-int led_data = 21; // PA21
-int ana_trigger_r = 22; // PA11
-int ana_trigger_l = 23; // PB03
+int button_extra = 2; // PA10
+int button_a = 3; // PB10
+int button_b = 4; // PB11
+int dpad_up = 5; // PA19
+int led_clk = 6; // PA2
+int bumper_r = 7; // PA18
+int led_data = 8; // PA3
+int button_start = 9; // PA12
+int rumble = 10; // PA13
+int button_hat_l = 11; // PA27
+int usr_led_g = 12; // PA9
+int usr_led_r = 13; // PA8
+int button_hat_r = 14; // PA28
+int button_y = 15; // PB8
+int button_x = 16; // PB9
+int button_home = 17; // PA0
+int bumper_l = 18; // PA1
+int dpad_down = 19; // PA20
+int dpad_left = 20; // PA21
+int button_back = 21; // PA11
+int ana_trigger_l = 22; // PB2
+int ana_trigger_r = 23; // PB3
 
 // Pins on the expander
 int expander_left_x_enc_vcc = 0;
