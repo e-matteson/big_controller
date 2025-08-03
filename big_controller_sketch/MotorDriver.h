@@ -26,9 +26,9 @@ static const uint16_t sineLookupTable[360] = {
 164, 169, 173, 177, 181, 185, 190, 194, 198, 202, 207, 211, 215, 220, 224, 228, 233, 237, 241, 246};
 
 
-class Motor : public BLDCDriver {
+class MotorDriver : public BLDCDriver {
 public: 
-    Motor(TSpi* bus, uint8_t id)
+    MotorDriver(TSpi* bus, uint8_t id)
         : BLDCDriver()
         , m_Chip(bus, id) {
     }
@@ -94,10 +94,14 @@ public:
         pwmg_a_duty_register_t a_reg{compute_duty_cycle(Ua)};
         pwmg_b_duty_register_t b_reg{compute_duty_cycle(Ub)};
         pwmg_c_duty_register_t c_reg{compute_duty_cycle(Uc)};
+        // a_reg.print();
 
         m_Chip.write(a_reg);
         m_Chip.write(b_reg);
         m_Chip.write(c_reg);
+
+        m_History[m_HistoryIndex] = a_reg.encode();
+        m_HistoryIndex = (m_HistoryIndex + 1) % m_History.size();
     }
 
     /**
@@ -133,11 +137,15 @@ public:
     // TODO private
     Drv8311 m_Chip;
 
+
+    std::array<uint16_t, 100> m_History = {0};
+    uint32_t m_HistoryIndex = 0;
+
+    const float m_VoltageLimit = 6;
+    const float m_VoltagePowerSupply= 12;
 private:
     uint16_t m_Period = 500;
 
     // TODO What should the voltage limit and supply voltage actually be?
-    const float m_VoltageLimit = 3;
-    const float m_VoltagePowerSupply= 3;
 
 };

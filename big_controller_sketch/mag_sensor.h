@@ -14,8 +14,9 @@
 
 class MagSensor : public Sensor {
 public:
-    MagSensor(TwoWire &wirePort, uint8_t address)
+    MagSensor(TwoWire &wirePort, uint8_t address, float angle_offset)
         : Sensor()
+        , m_AngleOffset(angle_offset)
         , m_I2cAddress(address)
         , m_WirePort(wirePort) {
     }
@@ -35,9 +36,10 @@ protected:
     // Get current shaft angle from the sensor hardware, and
     // return it as a float in radians, in the range 0 to 2PI.
     float getSensorAngle() override {
-        return m_Sensor.getAngleResult();
+        return m_Sensor.getAngleResult() + m_AngleOffset;
     }
 
+    float m_AngleOffset;
     uint8_t m_I2cAddress;
     TwoWire& m_WirePort;
     TMAG5273 m_Sensor;
