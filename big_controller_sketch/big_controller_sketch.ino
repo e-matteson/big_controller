@@ -1,7 +1,7 @@
-#include <SimpleFOC.h>
-#include "tspi.h"
+#include "TSpi.h"
 #include "MotorDriver.h"
-#include "mag_sensor.h"
+#include "Motion.h"
+#include "MagSensor.h"
 #include <TCA9555.h>
 
 // Pins on the MCU
@@ -43,16 +43,16 @@ int expander_rumble_r = 5;
 
 TSpi spi{&SPI, cs, {5'000'000, MSBFIRST, SPI_MODE1}}; // max baud rate is 10MHz
 MotorDriver driver {&spi, 0};
-BLDCMotor motor = BLDCMotor(7); // TODO what's the "pole pairs number"? Any other args I should give?
 
-MagSensor encoder {Wire, 0x78, -55};
 TCA9555 expander(0x20);
+MagSensor encoder {Wire, 0x78, 0};
+
+Motion motion(&driver, &encoder, 7);
 
 void setup() {
     Serial.begin(9600);
     delay(3000);
     Serial.println("setup");
-    SimpleFOCDebug::enable();
 
     pinMode(usr_led_g, OUTPUT);
     pinMode(usr_led_r, OUTPUT);
@@ -70,39 +70,9 @@ void setup() {
     }
 
     spi.begin();
-    driver.init();
-
-    motor.controller = MotionControlType::angle;
-    motor.voltage_limit = driver.m_VoltageLimit;
-
-    // Example tunings
-    motor.PID_velocity.P = 0.2;
-    motor.PID_velocity.I = 20;
-    // jerk control using voltage voltage ramp
-    // default value is 300 volts per sec  ~ 0.3V per millisecond
-    motor.PID_velocity.output_ramp = 1000;
-
-    // velocity low pass filtering
-    // default 5ms - try different values to see what is the best.
-    // the lower the less filtered
-    motor.LPF_velocity.Tf = 0.01;
-
-    // angle P controller
-    // default P=20
-    motor.P_angle.P = 20;
-    //  maximal velocity of the position control
-    // default 20
-    motor.velocity_limit = 4;
-
-    // link the motor to the sensor
-    motor.linkSensor(&encoder);
-    // link the motor to the driver
-    motor.linkDriver(&driver);
-
-    // initialize motor
-    motor.init();
-    // align encoder and start FOC
-    motor.initFOC();
+    driver.begin();
+    motion.begin();
+    motion.setTarget(145);
 
     Serial.println("setup done");
 }
@@ -115,39 +85,14 @@ void toggle_led() {
 
 void loop() {
     uint32_t timestamp = millis();
-    bool state = false;
     while (1) {
+        delay(10);
+        motion.update();
         uint32_t now = millis();
         if (timestamp + 1000 < now) {
             timestamp = now;
-            state ^= true;
-            digitalWrite(usr_led_g, state);
-
-            // encoder.update();
-            // Serial.print("angle=");
-            // Serial.println(encoder.getAngle());
-            if (state) {
-                Serial.println("MOVE TO 70");
-                motor.move(70);
-            }  else {
-                Serial.println("MOVE TO 110");
-                motor.move(110);
-            }
-            for (int i = 0; i < driver.m_History.size(); i++) {
-                Serial.print(driver.m_History[i]);
-                if ((i+1) % 10 == 0) {
-                    Serial.println("");
-                } else {
-                    Serial.print(" ");
-                }
-            }
-            driver.m_History = {0};
-            Serial.println("-------");
+            toggle_led();
         }
-        // toggle_led();
-
-        // iterative FOC function
-        motor.loopFOC();
     }
 }
 

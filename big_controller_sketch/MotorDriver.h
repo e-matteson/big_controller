@@ -1,6 +1,8 @@
+#pragma once
+
 #include <SimpleFOC.h>
 
-#include "drv8311.h"
+#include "Drv8311.h"
 
 
 // This table is for testing, SimpleFOC won't use it
@@ -51,6 +53,10 @@ public:
 
         // TODO what does the return value mean? should it be 0 or not 0?
         return 0;
+    }
+
+    void begin() {
+        init();
     }
 
     /** Enable hardware */

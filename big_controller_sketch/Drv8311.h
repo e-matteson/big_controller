@@ -5,7 +5,7 @@
 #include <optional>
 
 #include "utils.h"
-#include "tspi.h"
+#include "TSpi.h"
 #include "drv8311_registers.h"
 
 using namespace drv8311_registers;
