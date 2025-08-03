@@ -122,6 +122,11 @@ public:
         // TODO can we ignore it too?
     }
 
+    // pos_edeg must be in [0, 360)
+    void commandElectricalAngle(float pos_edeg, float scale_factor) {
+        setFromSineTable(static_cast<uint32_t>(round(pos_edeg)), scale_factor);
+    }
+
     void setFromSineTable(uint32_t offset, float scale_factor) {
         uint32_t a_index = offset % 360;
         uint32_t b_index = (offset + 120) % 360;

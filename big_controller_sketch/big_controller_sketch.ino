@@ -72,7 +72,8 @@ void setup() {
     spi.begin();
     driver.begin();
     motion.begin();
-    motion.setTarget(145);
+    motion.setTarget(15);
+    motion.align();
 
     Serial.println("setup done");
 }
