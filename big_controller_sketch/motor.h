@@ -36,7 +36,7 @@ public:
     int init() override {
         m_Chip.begin();
 
-        m_Chip.write(pwmg_period_register_t{1000});
+        m_Chip.write(pwmg_period_register_t{m_Period});
 
         auto pwmg_ctrl = m_Chip.read<pwmg_ctrl_register_t>();
         assert(pwmg_ctrl.has_value());
@@ -66,7 +66,7 @@ public:
     // In range 0-100
     void setDutyCyclePercents(uint8_t a, uint8_t b, uint8_t c) {
         auto compute = [this](uint8_t percentage) {
-            return static_cast<uint16_t>(constrain(percentage * m_Period / 100, 0, 100));
+            return static_cast<uint16_t>(constrain(percentage * m_Period / 100, 0, m_Period));
         };
 
         pwmg_a_duty_register_t a_reg{compute(a)};
@@ -86,22 +86,18 @@ public:
     * @param Uc - phase C voltage
     */
     void setPwm(float Ua, float Ub, float Uc) override {
-        // TODO 0-1? 0-100? 0-voltage_limit?
-        Ua = constrain(Ua, 0, m_VoltageLimit);
-        Ub = constrain(Ub, 0, m_VoltageLimit);
-        Uc = constrain(Uc, 0, m_VoltageLimit);
+        auto compute_duty_cycle = [this](float u) {
+            float voltage = constrain(u, 0.0f, m_VoltageLimit);
+            return static_cast<uint32_t>(voltage * m_Period / m_VoltagePowerSupply);
 
-        dc_a = constrain(Ua / m_VoltagePowerSupply, 0.0f, 1.0f);
-        dc_b = constrain(Ub / m_VoltagePowerSupply, 0.0f, 1.0f);
-        dc_c = constrain(Uc / m_VoltagePowerSupply, 0.0f, 1.0f);
+        };
+        pwmg_a_duty_register_t a_reg{compute_duty_cycle(Ua)};
+        pwmg_b_duty_register_t b_reg{compute_duty_cycle(Ub)};
+        pwmg_c_duty_register_t c_reg{compute_duty_cycle(Uc)};
 
-        // pwmg_a_duty_register_t a_reg{a};
-        // pwmg_b_duty_register_t b_reg{b};
-        // pwmg_c_duty_register_t c_reg{c};
-
-        // driver.write(a_reg);
-        // driver.write(b_reg);
-        // driver.write(c_reg);
+        m_Chip.write(a_reg);
+        m_Chip.write(b_reg);
+        m_Chip.write(c_reg);
     }
 
     /**
@@ -116,26 +112,32 @@ public:
         // TODO can we ignore it too?
     }
 
-    void setFromSineTable(uint32_t offset) {
+    void setFromSineTable(uint32_t offset, float scale_factor) {
         uint32_t a_index = offset % 360;
         uint32_t b_index = (offset + 120) % 360;
         uint32_t c_index = (offset + 240) % 360;
-        setDutyCyclePercents(lookup(a_index), lookup(b_index), lookup(c_index));
-    }
-private:
-    uint16_t lookup(uint32_t index) {
-        uint16_t offset = 0;
-        uint16_t scale_numerator = 2;
-        uint16_t scale_denominator = 3;
-        uint32_t scaled_duty = sineLookupTable[index] * scale_numerator / scale_denominator;
-        return  min(scaled_duty + offset, m_Period);
+
+        auto compute = [this, scale_factor](uint32_t index) -> uint16_t {
+            return static_cast<uint16_t>(round(sineLookupTable[index] * scale_factor));
+        };
+
+        pwmg_a_duty_register_t a_reg{compute(a_index)};
+        pwmg_b_duty_register_t b_reg{compute(b_index)};
+        pwmg_c_duty_register_t c_reg{compute(c_index)};
+        // a_reg.print();
+        m_Chip.write(a_reg);
+        m_Chip.write(b_reg);
+        m_Chip.write(c_reg);
     }
 
+    // TODO private
+    Drv8311 m_Chip;
+
+private:
     uint16_t m_Period = 500;
 
     // TODO What should the voltage limit and supply voltage actually be?
     const float m_VoltageLimit = 3;
-    const float m_VoltagePowerSupply= 4;
+    const float m_VoltagePowerSupply= 3;
 
-    Drv8311 m_Chip;
 };

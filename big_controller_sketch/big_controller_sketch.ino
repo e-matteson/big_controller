@@ -1,10 +1,7 @@
 #include "tspi.h"
 #include "motor.h"
 #include "mag_sensor.h"
-
-#include <cstdint>
 #include <TCA9555.h>
-#include <Wire.h>
 
 // Pins on the MCU
 int dpad_right = 0; // PA22
@@ -32,6 +29,8 @@ int button_back = 21; // PA11
 int ana_trigger_l = 22; // PB2
 int ana_trigger_r = 23; // PB3
 
+int cs = 31;
+
 // Pins on the expander
 int expander_left_x_enc_vcc = 0;
 int expander_left_y_enc_vcc = 1;
@@ -41,27 +40,63 @@ int expander_rumble_l = 4;
 int expander_rumble_r = 5;
 
 
-TSpi spi{&SPI, 10, {5'000'000, MSBFIRST, SPI_MODE1}}; // max baud rate is 10MHz
-Motor motor {&spi, 3};
+TSpi spi{&SPI, cs, {5'000'000, MSBFIRST, SPI_MODE1}}; // max baud rate is 10MHz
+Motor motor {&spi, 0};
 
 MagSensor sensor {Wire, 0x78};
-TCA9535 expander(0x20);
+TCA9555 expander(0x20);
 
 void setup() {
     Serial.begin(9600);
+    Serial.println("setup");
+    pinMode(usr_led_g, OUTPUT);
+    pinMode(usr_led_r, OUTPUT);
+    digitalWrite(usr_led_r, HIGH);
+    delay(3000);
+    Serial.println("delayed");
 
     spi.begin();
     motor.init();
 
     Wire.begin();
+    Serial.println("begin expander");
+    expander.begin(INPUT);
+    Serial.print("is expander connected: ");
+    Serial.println(expander.isConnected());
+
+    // Turn on encoder
+    Serial.println("begin expander");
+    expander.pinMode1(expander_left_x_enc_vcc, OUTPUT);
+    expander.write1(expander_left_x_enc_vcc, HIGH);
+
+    expander.pinMode1(expander_right_x_enc_vcc, OUTPUT);
+    expander.write1(expander_right_x_enc_vcc, LOW);
+    delay(1000);
+
+    Serial.println("begin sensor");
     if (!sensor.begin()) {
         Serial.println("failed to initialize tmag5723");
     }
-    // Mask where 1 is input and 0 is output
-    expander.pinMode16(0xFFFF);
+
+    Serial.println("setup done");
+}
+
+void toggle_led() {
+    static bool state = false;
+    state ^= true;
+    digitalWrite(usr_led_g, state);
 }
 
 void loop() {
+    // Serial.println("loop");
+    toggle_led();
+
+    // auto reg = motor.m_Chip.read<drv8311_registers::pwm_ctrl1_register_t>();
+    // if (!reg.has_value()) {
+    //     Serial.println("read failed");
+    // } else {
+    //     Serial.println(reg->encode());
+    // }
     sensor.update();
     Serial.print("angle=");
     Serial.println(sensor.getAngle());
@@ -72,16 +107,21 @@ void loop() {
     }
     Serial.println();
 
-    delay(1000);
-}
-
-void demo_motor() {
-    uint32_t pause_us = 150;
-    for(uint32_t i = 0; i < UINT32_MAX; i++) {
-        uint32_t start_time_us = micros();
-        motor.setFromSineTable(i);
-        // TODO micros will rollover after an hour
-        delayMicroseconds(start_time_us + pause_us - micros());
+    float scale = 0.5;
+    Serial.println("up");
+    for(uint32_t i = 0; i < 360; i++) {
+        motor.setFromSineTable(i, scale);
+        delay(1);
     }
 
+    delay(500);
+
+    Serial.println("down");
+    for(uint32_t i = 359; i > 0; i--) {
+        motor.setFromSineTable(i, scale);
+        delay(1);
+    }
+
+    delay(500);
 }
+
