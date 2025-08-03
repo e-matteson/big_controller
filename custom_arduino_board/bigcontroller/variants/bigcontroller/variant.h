@@ -90,9 +90,8 @@ static const uint8_t A1  = PIN_A1;
 #define PIN_SPI_SCK   (29u)
 #define PIN_SPI_SS    (31u)
 #define PERIPH_SPI    sercom0
-// TODO what should PAD_SPI_TX and PAD_SPI_RX be? I can't figure out the pattern.
 #define PAD_SPI_TX    SPI_PAD_0_SCK_1
-#define PAD_SPI_RX    SERCOM_RX_PAD_3
+#define PAD_SPI_RX    SERCOM_RX_PAD_2
 
 static const uint8_t SS   = PIN_SPI_SS;   // SPI Slave SS not used. Set here only for reference.
 static const uint8_t MOSI = PIN_SPI_MOSI;
