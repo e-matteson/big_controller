@@ -66,7 +66,8 @@ public:
 
 
         uint8_t distanceFactor = constrain(dist_mdeg / m_MaxDistance_mdeg * 100, 0, 100);
-        uint8_t scaleFactor = map(distanceFactor, 0, 100, 0, 75);
+        // Limit the max pwm to prevent overheating
+        uint8_t scaleFactor = map(distanceFactor, 0, 100, 0, 50);
 
         m_Motor->commandElectricalAngle(command_edeg, scaleFactor/100.0);
 
@@ -113,5 +114,4 @@ private:
     float m_EncoderOffset_mdeg = 0;
     float m_Target_mdeg = 90;
     float m_MaxDistance_mdeg = 30;
-    float m_MaxScaleFactor = 0.75;
 };
