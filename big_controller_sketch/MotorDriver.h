@@ -43,12 +43,14 @@ public:
         auto pwmg_ctrl = m_Chip.read<pwmg_ctrl_register_t>();
         assert(pwmg_ctrl.has_value());
         pwmg_ctrl->pwm_en = 1;
+        // UP_AND_DOWN might cause weirdness when the duty cycle is 0.
+        pwmg_ctrl->pwmcntr_mode = pwmcntr_mode_enum::UP;
         m_Chip.write(pwmg_ctrl.value());
 
         auto drv_ctrl = m_Chip.read<drv_ctrl_register_t>();
         assert(drv_ctrl.has_value());
-        drv_ctrl->tdead_ctrl = tdead_ctrl_enum::_1US;
-        drv_ctrl->dlycmp_en = 1;
+        drv_ctrl->tdead_ctrl = m_DeadtimeSetting;
+        drv_ctrl->dlycmp_en = 0;
         m_Chip.write(drv_ctrl.value());
 
         // TODO what does the return value mean? should it be 0 or not 0?
@@ -133,7 +135,7 @@ public:
         uint32_t c_index = (offset + 240) % 360;
 
         auto compute = [this, scale_factor](uint32_t index) -> uint16_t {
-            return static_cast<uint16_t>(round(sineLookupTable[index] * scale_factor));
+            return static_cast<uint16_t>(round((sineLookupTable[index] + m_HackyOffset) * scale_factor));
         };
 
         pwmg_a_duty_register_t a_reg{compute(a_index)};
@@ -162,7 +164,13 @@ public:
     const float m_VoltageLimit = 6;
     const float m_VoltagePowerSupply= 12;
 private:
-    uint16_t m_Period = 500;
+    // When we command exactly 0% or 1%(?) duty cycle, the driver jumps to 100% duty cycle instead for some reason.
+    // So we can add an offset of ~2 to all duty cycles, and the max duty cycle, to avoid that.
+    // Or, we can use a deadtime setting of 0us instead, though that might cause the driver to heat up more.
+    uint16_t m_HackyOffset = 0;
+    tdead_ctrl_enum m_DeadtimeSetting = tdead_ctrl_enum::NO_DEADTIME;
+
+    uint16_t m_Period = 500 + m_HackyOffset;
 
     // TODO What should the voltage limit and supply voltage actually be?
 
