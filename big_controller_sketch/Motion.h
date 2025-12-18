@@ -40,9 +40,8 @@ public:
     }
 
     float mechToElecDeg(float pos_mdeg) {
-        int sectorWidth_mdeg = 360 / m_NumPoles;
-        int sectorNum = pos_mdeg / sectorWidth_mdeg;
-
+        float sectorWidth_mdeg = 360.0 / m_NumPoles;
+        int sectorNum = static_cast<int>(pos_mdeg / sectorWidth_mdeg);
         return (pos_mdeg - sectorWidth_mdeg * sectorNum) * m_NumPoles;
     }
 
