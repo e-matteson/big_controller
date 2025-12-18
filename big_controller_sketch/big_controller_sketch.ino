@@ -71,10 +71,12 @@ void setup() {
     spi.begin();
     driver.begin();
     motion.begin();
-    motion.setTarget(15);
+
+    motion.setTarget(0);
     motion.align();
 
-    Serial.println("setup done");
+    delay(500);
+    motion.setTarget(0);
 }
 
 void toggle_led() {
@@ -84,6 +86,13 @@ void toggle_led() {
 }
 
 void loop() {
+    // spin();
+    update_loop();
+}
+
+void update_loop() {
+    toggle_led();
+    // int pos = 0;
     uint32_t timestamp = millis();
     while (1) {
         delay(10);
@@ -92,36 +101,19 @@ void loop() {
         if (timestamp + 1000 < now) {
             timestamp = now;
             toggle_led();
+            // pos = (pos + 30) % 360;
+            // motion.setTarget(pos);
+            // Serial1.print("loop: to ");
+            // Serial1.println(pos);
         }
     }
 }
 
-// void demo() {
-
-//     encoder.update();
-//     Serial.print("angle=");
-//     Serial.println(encoder.getAngle());
-
-//     // for (int i = 0; i < 16; i++) {
-//     //     Serial.print(expander.read1(i));
-//     //     Serial.print(' ');
-//     // }
-//     // Serial.println();
-
-//     float scale = 0.75;
-//     Serial.println("up");
-//     for(uint32_t i = 0; i < 360; i++) {
-//         driver.setFromSineTable(i, scale);
-//         delay(1);
-//     }
-
-//     delay(500);
-
-//     Serial.println("down");
-//     for(uint32_t i = 359; i > 0; i--) {
-//         driver.setFromSineTable(i, scale);
-//         delay(1);
-//     }
-
-//     delay(500);
-// }
+void spin() {
+    float scale = 0.5;
+    for(uint32_t i = 0; i < 360; i++) {
+        driver.setFromSineTable(i, scale);
+        delay(1);
+    }
+    toggle_led();
+}
