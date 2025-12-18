@@ -50,13 +50,12 @@ MagSensor encoder {Wire, 0x78, 0};
 Motion motion(&driver, &encoder, 7);
 
 void setup() {
-    Serial.begin(9600);
-    delay(3000);
-    Serial.println("setup");
 
     pinMode(usr_led_g, OUTPUT);
     pinMode(usr_led_r, OUTPUT);
     digitalWrite(usr_led_r, HIGH);
+
+    Serial1.begin(9600);
 
     Wire.begin();
     expander.begin(INPUT);
@@ -66,7 +65,7 @@ void setup() {
     expander.write1(expander_left_x_enc_vcc, HIGH);
     delay(100); // TODO is delay needed for encoder to power on?
     if (!encoder.begin()) {
-        Serial.println("failed to initialize tmag5723");
+        Serial1.println("failed to initialize tmag5723");
     }
 
     spi.begin();

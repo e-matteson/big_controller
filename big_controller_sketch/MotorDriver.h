@@ -143,6 +143,13 @@ public:
         m_Chip.write(a_reg);
         m_Chip.write(b_reg);
         m_Chip.write(c_reg);
+
+        Serial1.print(", a: ");
+        Serial1.print(a_reg.pwm_duty_outa);
+        Serial1.print(", b: ");
+        Serial1.print(b_reg.pwm_duty_outb);
+        Serial1.print(", c: ");
+        Serial1.print(c_reg.pwm_duty_outc);
     }
 
     // TODO private

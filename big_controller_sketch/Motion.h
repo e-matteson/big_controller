@@ -20,19 +20,19 @@ public:
 
     void align() {
         // TODO
-        Serial.print("align");
+        Serial1.print("align");
         float initial_pos_mdeg = m_Encoder->getSensorAngle();
 
         m_Motor->commandElectricalAngle(0, 0.75);
         delay(1000);
         float pos_mdeg = m_Encoder->getSensorAngle();
         m_EncoderOffset_mdeg = -1 * pos_mdeg;
-        Serial.print("initial pos: ");
-        Serial.print(initial_pos_mdeg);
-        Serial.print("align pos: ");
-        Serial.print(pos_mdeg);
-        Serial.print(" offset: ");
-        Serial.print(m_EncoderOffset_mdeg);
+        Serial1.print("initial pos: ");
+        Serial1.print(initial_pos_mdeg);
+        Serial1.print("align pos: ");
+        Serial1.print(pos_mdeg);
+        Serial1.print(" offset: ");
+        Serial1.print(m_EncoderOffset_mdeg);
     }
 
     void setTarget(float pos_mdeg) {
@@ -42,6 +42,9 @@ public:
     float mechToElecDeg(float pos_mdeg) {
         float sectorWidth_mdeg = 360.0 / m_NumPoles;
         int sectorNum = static_cast<int>(pos_mdeg / sectorWidth_mdeg);
+
+        Serial1.print(" sector: ");
+        Serial1.print(sectorNum);
         return (pos_mdeg - sectorWidth_mdeg * sectorNum) * m_NumPoles;
     }
 
@@ -67,18 +70,18 @@ public:
 
         m_Motor->commandElectricalAngle(command_edeg, scaleFactor/100.0);
 
-        Serial.print("pos_mdeg: ");
-        Serial.print(pos_mdeg);
-        Serial.print(" pos_edeg: ");
-        Serial.print(pos_edeg);
-        Serial.print(" cmd_edeg: ");
-        Serial.print(command_edeg);
-        Serial.print(" dist_mdeg: ");
-        Serial.print(dist_mdeg);
-        Serial.print(" distanceFactor: ");
-        Serial.print(distanceFactor);
-        Serial.print(" scale: ");
-        Serial.println(scaleFactor);
+        Serial1.print(" pos_mdeg: ");
+        Serial1.print(pos_mdeg);
+        Serial1.print(" pos_edeg: ");
+        Serial1.print(pos_edeg);
+        Serial1.print(" cmd_edeg: ");
+        Serial1.print(command_edeg);
+        Serial1.print(" dist_mdeg: ");
+        Serial1.print(dist_mdeg);
+        Serial1.print(" distanceFactor: ");
+        Serial1.print(distanceFactor);
+        Serial1.print(" scale: ");
+        Serial1.println(scaleFactor);
     }
 
     static float modularDistance(float start_pos, float end_pos) {
