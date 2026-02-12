@@ -4,9 +4,7 @@
 #include <Wire.h>
 #include <cmath>
 
-// There's a bug in readRegister, change 2 to 1
-// (https://github.com/sparkfun/SparkFun_TMAG5273_Arduino_Library/issues/11)
-// Some other compiler warnings needed to be fixed, too
+// Version 2.0.0 works! 1.0.3 does not.
 #include <SparkFun_TMAG5273_Arduino_Library.h>
 #include <SparkFun_TMAG5273_Arduino_Library_Defs.h>
 
