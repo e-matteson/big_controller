@@ -2,6 +2,7 @@
 
 #include <SimpleFOC.h>
 #include <Wire.h>
+#include <cmath>
 
 // There's a bug in readRegister, change 2 to 1
 // (https://github.com/sparkfun/SparkFun_TMAG5273_Arduino_Library/issues/11)
@@ -36,6 +37,13 @@ public:
     // Get current shaft angle from the sensor hardware, and
     // return it as a float in radians, in the range 0 to 2PI.
     float getSensorAngle() override {
+        float radians = getSensorAngleDegrees() * 2.0f * M_PI / 360.0f;
+        return radians;
+    }
+
+    // Get current shaft angle from the sensor hardware, and
+    // return it as a float in degrees, in the range 0 to 360.
+    float getSensorAngleDegrees() {
         return m_Sensor.getAngleResult() + m_AngleOffset;
     }
 

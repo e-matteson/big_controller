@@ -55,7 +55,7 @@ void setup() {
     pinMode(usr_led_r, OUTPUT);
     digitalWrite(usr_led_r, HIGH);
 
-    Serial1.begin(9600);
+    Serial1.begin(115200);
 
     Wire.begin();
     expander.begin(INPUT);
@@ -98,13 +98,11 @@ void update_loop() {
         delay(10);
         motion.update();
         uint32_t now = millis();
-        if (timestamp + 1000 < now) {
+        if (now > timestamp + 1000) {
             timestamp = now;
             toggle_led();
             // pos = (pos + 30) % 360;
             // motion.setTarget(pos);
-            // Serial1.print("loop: to ");
-            // Serial1.println(pos);
         }
     }
 }

@@ -21,11 +21,11 @@ public:
     void align() {
         // TODO
         Serial1.print("align");
-        float initial_pos_mdeg = m_Encoder->getSensorAngle();
+        float initial_pos_mdeg = m_Encoder->getSensorAngleDegrees();
 
         m_Motor->commandElectricalAngle(0, 0.75);
         delay(1000);
-        float pos_mdeg = m_Encoder->getSensorAngle();
+        float pos_mdeg = m_Encoder->getSensorAngleDegrees();
         m_EncoderOffset_mdeg = -1 * pos_mdeg;
         Serial1.print("initial pos: ");
         Serial1.print(initial_pos_mdeg);
@@ -49,7 +49,7 @@ public:
     }
 
     void update() {
-        float pos_mdeg = normalizePosition(m_Encoder->getSensorAngle() + m_EncoderOffset_mdeg);
+        float pos_mdeg = normalizePosition(m_Encoder->getSensorAngleDegrees() + m_EncoderOffset_mdeg);
         float pos_edeg = mechToElecDeg(pos_mdeg);
 
         auto forward_dist = abs(deltaForModularMove(pos_mdeg, m_Target_mdeg, true));
@@ -71,6 +71,8 @@ public:
 
         m_Motor->commandElectricalAngle(command_edeg, scaleFactor/100.0);
 
+        Serial1.print(" target_mdeg: ");
+        Serial1.print(m_Target_mdeg);
         Serial1.print(" pos_mdeg: ");
         Serial1.print(pos_mdeg);
         Serial1.print(" pos_edeg: ");
