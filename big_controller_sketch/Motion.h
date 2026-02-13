@@ -43,8 +43,8 @@ public:
         float sectorWidth_mdeg = 360.0 / m_NumPoles;
         int sectorNum = static_cast<int>(pos_mdeg / sectorWidth_mdeg);
 
-        Serial1.print(" sector: ");
-        Serial1.print(sectorNum);
+        // Serial1.print(" sector: ");
+        // Serial1.print(sectorNum);
         return (pos_mdeg - sectorWidth_mdeg * sectorNum) * m_NumPoles;
     }
 
@@ -71,20 +71,20 @@ public:
 
         m_Motor->commandElectricalAngle(command_edeg, scaleFactor/100.0);
 
-        Serial1.print(" target_mdeg: ");
-        Serial1.print(m_Target_mdeg);
-        Serial1.print(" pos_mdeg: ");
-        Serial1.print(pos_mdeg);
-        Serial1.print(" pos_edeg: ");
-        Serial1.print(pos_edeg);
-        Serial1.print(" cmd_edeg: ");
-        Serial1.print(command_edeg);
-        Serial1.print(" dist_mdeg: ");
-        Serial1.print(dist_mdeg);
-        Serial1.print(" distanceFactor: ");
-        Serial1.print(distanceFactor);
-        Serial1.print(" scale: ");
-        Serial1.println(scaleFactor);
+        // Serial1.print(" target_mdeg: ");
+        // Serial1.print(m_Target_mdeg);
+        // Serial1.print(" pos_mdeg: ");
+        // Serial1.print(pos_mdeg);
+        // Serial1.print(" pos_edeg: ");
+        // Serial1.print(pos_edeg);
+        // Serial1.print(" cmd_edeg: ");
+        // Serial1.print(command_edeg);
+        // Serial1.print(" dist_mdeg: ");
+        // Serial1.print(dist_mdeg);
+        // Serial1.print(" distanceFactor: ");
+        // Serial1.print(distanceFactor);
+        // Serial1.print(" scale: ");
+        // Serial1.println(scaleFactor);
     }
 
     static float modularDistance(float start_pos, float end_pos) {

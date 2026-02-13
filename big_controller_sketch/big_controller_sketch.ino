@@ -40,14 +40,25 @@ int expander_right_y_enc_vcc = 3;
 int expander_rumble_l = 4;
 int expander_rumble_r = 5;
 
+TCA9555 expander(0x20);
 
 TSpi spi{&SPI, cs, {5'000'000, MSBFIRST, SPI_MODE1}}; // max baud rate is 10MHz
-MotorDriver driver {&spi, 0};
 
-TCA9555 expander(0x20);
-MagSensor encoder {Wire, 0x78, 0};
+MotorDriver driver_left_x {&spi, 0};
+MagSensor encoder_left_x {Wire, 0x10, 0};
+Motion motion_left_x(&driver_left_x, &encoder_left_x, 7);
 
-Motion motion(&driver, &encoder, 7);
+MotorDriver driver_left_y {&spi, 1};
+MagSensor encoder_left_y {Wire, 0x11, 0};
+Motion motion_left_y(&driver_left_y, &encoder_left_y, 7);
+
+MotorDriver driver_right_x {&spi, 2};
+MagSensor encoder_right_x {Wire, 0x12, 0};
+Motion motion_right_x(&driver_right_x, &encoder_right_x, 7);
+
+MotorDriver driver_right_y {&spi, 3};
+MagSensor encoder_right_y {Wire, 0x13, 0};
+Motion motion_right_y(&driver_right_y, &encoder_right_y, 7);
 
 void setup() {
 
@@ -55,28 +66,97 @@ void setup() {
     pinMode(usr_led_r, OUTPUT);
     digitalWrite(usr_led_r, HIGH);
 
+
     Serial1.begin(115200);
+    Serial1.println("startup");
 
     Wire.begin();
+    Serial1.println("startup1");
     expander.begin(INPUT);
+    Serial1.println("startup2");
 
-    // Turn on encoder
     expander.pinMode1(expander_left_x_enc_vcc, OUTPUT);
+    expander.pinMode1(expander_left_y_enc_vcc, OUTPUT);
+    expander.pinMode1(expander_right_x_enc_vcc, OUTPUT);
+    expander.pinMode1(expander_right_y_enc_vcc, OUTPUT);
+
+    Serial1.println("startup3");
+    expander.write1(expander_left_x_enc_vcc, LOW);
+    expander.write1(expander_left_y_enc_vcc, LOW);
+    expander.write1(expander_right_x_enc_vcc, LOW);
+    expander.write1(expander_right_y_enc_vcc, LOW);
+
+    Serial1.println("startup4");
+    delay(100); // TODO is delay needed for encoder to power on?
+
+    // Turn on encoders one at a time and set their addresses
+    // TODO refactor this as a loop
     expander.write1(expander_left_x_enc_vcc, HIGH);
     delay(100); // TODO is delay needed for encoder to power on?
-    if (!encoder.begin()) {
-        Serial1.println("failed to initialize tmag5723");
+    if (!encoder_left_x.begin()) {
+        Serial1.println("failed to initialize left x tmag5723");
     }
 
+    Serial1.println("startup5");
+    expander.write1(expander_left_y_enc_vcc, HIGH);
+    delay(100); // TODO is delay needed for encoder to power on?
+    if (!encoder_left_y.begin()) {
+        Serial1.println("failed to initialize left y tmag5723");
+    }
+
+    Serial1.println("startup6");
+    expander.write1(expander_right_x_enc_vcc, HIGH);
+    delay(100); // TODO is delay needed for encoder to power on?
+    if (!encoder_right_x.begin()) {
+        Serial1.println("failed to initialize right x tmag5723");
+    }
+
+    Serial1.println("startup7");
+    expander.write1(expander_right_y_enc_vcc, HIGH);
+    delay(100); // TODO is delay needed for encoder to power on?
+    if (!encoder_right_y.begin()) {
+        Serial1.println("failed to initialize right y tmag5723");
+    }
+
+    Serial1.println("startup8");
     spi.begin();
-    driver.begin();
-    motion.begin();
 
-    motion.setTarget(0);
-    motion.align();
+    driver_left_x.begin();
+    driver_left_y.begin();
+    driver_right_x.begin();
+    driver_right_y.begin();
 
-    delay(500);
-    motion.setTarget(0);
+    motion_left_x.begin();
+    motion_left_y.begin();
+    motion_right_x.begin();
+    motion_right_y.begin();
+
+
+
+    motion_left_x.align();
+    motion_left_y.align();
+    motion_right_x.align();
+    motion_right_y.align();
+
+    // 70,21  302,350
+    motion_left_x.setTarget(70);
+    motion_left_y.setTarget(21);
+    motion_right_x.setTarget(302);
+    motion_right_y.setTarget(350);
+
+    // motion_left_x.setTarget(0);
+    // motion_left_x.align();
+
+    // delay(500);
+    // motion_left_x.setTarget(0);
+
+    // delay(500);
+    // motion_left_y.setTarget(0);
+    // motion_left_y.align();
+
+    // delay(500);
+    // motion_left_y.setTarget(0);
+    Serial1.println("startup done");
 }
 
 void toggle_led() {
@@ -88,30 +168,39 @@ void toggle_led() {
 void loop() {
     // spin();
     update_loop();
+    // print_encoder();
+}
+
+void print_encoder() {
+    while (1) {
+        delay(500);
+        toggle_led();
+        Serial1.print("(");
+        Serial1.print(encoder_left_x.getSensorAngleDegrees());
+        Serial1.print(", ");
+        Serial1.print(encoder_left_y.getSensorAngleDegrees());
+        Serial1.print(") (");
+        Serial1.print(encoder_right_x.getSensorAngleDegrees());
+        Serial1.print(", ");
+        Serial1.print(encoder_right_y.getSensorAngleDegrees());
+        Serial1.println(")");
+    }
 }
 
 void update_loop() {
     toggle_led();
-    // int pos = 0;
     uint32_t timestamp = millis();
     while (1) {
         delay(10);
-        motion.update();
+        motion_left_x.update();
+        // motion_left_y.update();
+        // motion_right_x.update();
+        // motion_right_y.update();
         uint32_t now = millis();
         if (now > timestamp + 1000) {
             timestamp = now;
             toggle_led();
-            // pos = (pos + 30) % 360;
-            // motion.setTarget(pos);
         }
     }
 }
 
-void spin() {
-    float scale = 0.5;
-    for(uint32_t i = 0; i < 360; i++) {
-        driver.setFromSineTable(i, scale);
-        delay(1);
-    }
-    toggle_led();
-}
