@@ -11,12 +11,12 @@
                 {
                     "name": "Big Controller Arduino SAMD (32-bits ARM Cortex-M0+) Board",
                     "architecture": "samd",
-                    "version": "1.0.0",
+                    "version": "1.1.0",
                     "category": "Contributed",
-                    "url": "https://github.com/e-matteson/big_controller/raw/refs/heads/master/custom_arduino_board/bigcontroller-1.0.0.zip",
-                    "archiveFileName": "bigcontroller-1.0.0.zip",
-                    "checksum": "SHA-256:17debd4a84ecdb99de1bdaafaf1cd98de74681d8ed323a1143570283f72d71eb",
-                    "size": "2199526",
+                    "url": "https://github.com/e-matteson/big_controller/raw/refs/heads/master/custom_arduino_board/bigcontroller-1.1.0.zip",
+                    "archiveFileName": "bigcontroller-1.1.0.zip",
+                    "checksum": "SHA-256:4e5272139bd21611f58a7e35d186dea8c99a7b445a51ba02440e324676532675",
+                    "size": "4643060",
                     "boards": [
                         {
                             "name": "Big Controller"
