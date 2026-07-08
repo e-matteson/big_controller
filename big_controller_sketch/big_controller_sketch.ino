@@ -120,56 +120,79 @@ void setup() {
     Serial1.println("startup8");
     spi.begin();
 
-    // driver_left_x.begin();
+    driver_left_x.begin();
     driver_left_y.begin();
-    // driver_right_x.begin();
-    // driver_right_y.begin();
+    driver_right_x.begin();
+    driver_right_y.begin();
 
-    // motion_left_x.begin();
+    motion_left_x.begin();
     motion_left_y.begin();
-    // motion_right_x.begin();
-    // motion_right_y.begin();
+    motion_right_x.begin();
+    motion_right_y.begin();
 
-    motion_left_y.findHardstop();
+    { // centering right
+      const float default_right_x_command = 90;
+      const float default_right_y_command = 90;
 
-    // motion_left_x.align();
-    // motion_left_y.align();
-    // motion_right_x.align();
-    // motion_right_y.align();
+      Serial.println("center right x: attempt 1");
+      auto right_x_result1 = motion_right_x.findCenter(default_right_x_command);
 
-    // motion_left_y.setTarget(0);
+      Serial.println("center right y: attempt 1");
+      auto right_y_result1 = motion_right_y.findCenter(default_right_y_command);
 
-    // 70,21  302,350
-    // motion_left_x.setTarget(70 - motion_left_x.m_EncoderOffset_mdeg);
-    // motion_left_y.setTarget(21 - motion_left_y.m_EncoderOffset_mdeg);
-    // motion_right_x.setTarget(302 - motion_right_x.m_EncoderOffset_mdeg);
-    // motion_right_y.setTarget(350 - motion_right_y.m_EncoderOffset_mdeg);
+      // delay(1000);
+      // Serial.println("center right x: attempt 2");
+      // auto right_x_result2 = motion_right_x.findCenter(right_x_result1.value_or(default_right_x_command));
 
-    // motion_left_x.setTarget(-15);
-    // motion_left_y.setTarget(-32);
+      // Serial.println("center right y: attempt 2");
+      // auto right_y_result2 =motion_right_y.findCenter(right_y_result1.value_or(default_right_y_command));
 
-    // motion_left_x.setTarget(0);
-    // motion_left_y.setTarget(0);
-    // motion_right_x.setTarget(0);
-    // motion_right_y.setTarget(0);
+      if (right_x_result1.has_value()) {
+          motion_right_x.align(right_x_result1.value());
+      } else {
+          Serial.println("Failed to center right x axis");
+      }
+      if (right_y_result1.has_value()) {
+          motion_right_y.align(right_y_result1.value());
+      } else {
+          Serial.println("Failed to center right y axis");
+      }
+    }
+    { // centering left
+      const float default_left_x_command = 90;
+      const float default_left_y_command = 0;
 
-    // motion_left_x.setTarget(0);
-    // motion_left_x.align();
+      Serial.println("center left x: attempt 1");
+      auto left_x_result1 = motion_left_x.findCenter(default_left_x_command);
 
-    // delay(500);
-    // motion_left_x.setTarget(0);
+      Serial.println("center left y: attempt 1");
+      auto left_y_result1 = motion_left_y.findCenter(default_left_y_command);
 
-    // delay(500);
-    // motion_left_y.setTarget(0);
-    // motion_left_y.align();
+      // Serial.println("center left x: attempt 2");
+      // auto left_x_result2 = motion_left_x.findCenter(left_x_result1.value_or(default_left_x_command));
 
-    // delay(500);
-    // motion_left_y.setTarget(0);
+      // Serial.println("center left y: attempt 2");
+      // auto left_y_result2 =motion_left_y.findCenter(left_y_result1.value_or(default_left_y_command));
+
+      if (left_x_result1.has_value()) {
+          motion_left_x.align(left_x_result1.value());
+      } else {
+          Serial.println("Failed to center left x axis");
+      }
+      if (left_y_result1.has_value()) {
+          motion_left_y.align(left_y_result1.value());
+      } else {
+          Serial.println("Failed to center left y axis");
+      }
+    }
+
+
+    motion_left_x.setTarget(0);
+    motion_left_y.setTarget(0);
+    motion_right_x.setTarget(0);
+    motion_right_y.setTarget(0);
+
     Serial1.println("startup done");
-
-    // Center positions:
-    // Right: (308, 350)
-    // Left: (23, 72)
 }
 
 void toggle_led() {
@@ -185,18 +208,32 @@ void loop() {
 }
 
 void print_encoder() {
-    Serial1.print("(");
-    // Serial1.print(encoder_left_x.getSensorAngleDegrees());
-    Serial1.print(motion_left_x.getPosition_mdeg());
+    auto lx_mdeg = motion_left_x.getPosition_mdeg();
+    auto ly_mdeg = motion_left_y.getPosition_mdeg();
+    auto rx_mdeg = motion_right_x.getPosition_mdeg();
+    auto ry_mdeg = motion_right_y.getPosition_mdeg();
+  
+    // Serial1.print("mdeg: ");
+    // Serial1.print(lx_mdeg);
+    // Serial1.print("  edeg: ");
+    // Serial1.println(motion_left_x.mechToElecDeg(lx_mdeg));
+    
+    Serial1.print("mdeg: (");
+    Serial1.print(lx_mdeg);
     Serial1.print(", ");
-    // Serial1.print(encoder_left_y.getSensorAngleDegrees());
-    Serial1.print(motion_left_y.getPosition_mdeg());
+    Serial1.print(ly_mdeg);
     Serial1.print(") (");
-    // Serial1.print(encoder_right_x.getSensorAngleDegrees());
-    Serial1.print(motion_left_y.getPosition_mdeg());
+    Serial1.print(rx_mdeg);
     Serial1.print(", ");
-    // Serial1.print(encoder_right_y.getSensorAngleDegrees());
-    Serial1.print(motion_right_y.getPosition_mdeg());
+    Serial1.print(ry_mdeg);
+    Serial1.print(")  edeg: (");
+    Serial1.print(motion_left_x.mechToElecDeg(lx_mdeg));
+    Serial1.print(", ");
+    Serial1.print(motion_left_y.mechToElecDeg(ly_mdeg));
+    Serial1.print(") (");
+    Serial1.print(motion_right_x.mechToElecDeg(rx_mdeg));
+    Serial1.print(", ");
+    Serial1.print(motion_right_y.mechToElecDeg(ry_mdeg));
     Serial1.println(")");
 }
 
@@ -205,12 +242,12 @@ void update_loop() {
     uint32_t timestamp = millis();
     while (1) {
         delay(10);
-        // motion_left_x.update();
-        // motion_left_y.update();
-        // motion_right_x.update();
-        // motion_right_y.update();
+        motion_left_x.update();
+        motion_left_y.update();
+        motion_right_x.update();
+        motion_right_y.update();
         uint32_t now = millis();
-        if (now > timestamp + 2000) {
+        if (now > timestamp + 500) {
             timestamp = now;
             toggle_led();
             // Serial1.println("blink");
